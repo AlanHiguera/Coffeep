@@ -13,11 +13,12 @@ Currently, two official plugins are available:
 git add .
 git commit -M "Message"
 git push <branch>
-
+```
 
 branch: main, dev , Nombre feature
 Message: add: , delete: , fix:, feature: 
 ejemplo 
+```
 git add .
 git commit -m "add:file home "
 git push dev
