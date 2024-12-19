@@ -9,10 +9,10 @@ Currently, two official plugins are available:
 
 
 #GIT commands
-``` git
-git add .
-git commit -M "Message"
-git push <branch>
+``` 
+git add .   //Empaqueta los cambios y los guarda en git localmente.
+git commit -M "Message"   //comenta el paquete que ya añadí
+git push <branch>   //lleva esos cambios al repositorio y lo lleva a la rama que yo quiera(si no le indico es la mia actual)
 ```
 
 branch: main, dev , Nombre feature
