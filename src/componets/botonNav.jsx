@@ -1,10 +1,7 @@
 const BotonNav =()=> {
-
     return(
         <>
-       
-        <button>hola</button>
-    
+       <button>hola</button>   
         </>
     )
     
