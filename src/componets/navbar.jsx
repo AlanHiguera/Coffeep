@@ -3,11 +3,7 @@ const Navbar =()=> {
 
     return(
         <>
-        <p>    
-        hola, alan como estas 
-        </p>
-        <button>hola</button>
-    
+        <button>Home</button>
         </>
     )
     
