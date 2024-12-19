@@ -9,7 +9,7 @@ Currently, two official plugins are available:
 
 
 #GIT commands
-´´´ git
+``` git
 git add .
 git commit -M "Message"
 git push <branch>
@@ -21,3 +21,4 @@ ejemplo
 git add .
 git commit -m "add:file home "
 git push dev
+```
