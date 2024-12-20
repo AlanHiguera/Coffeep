@@ -2,7 +2,7 @@
 export const Alan = () => {
     return (
         <div>
-        <h1>Alan</h1>
+        <h1 className="bg-black">Alan</h1>
         </div>
     );
     }
