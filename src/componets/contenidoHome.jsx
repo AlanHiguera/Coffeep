@@ -1,9 +1,44 @@
 import './contenidoHome.css';
-export const ContenidoHome  = () => {
+
+export const ContenidoHome = () => {
     return (
-        <div>
-        <h1 className='hola'>ContenidoHome</h1>
-        <p>Este es el contenido de la pagina de inicio</p>
+        <div className="home-container">
+            {/* Barra de navegación */}
+            <nav className="navbar">
+                <a href="#">Inicio</a>
+                <a href="#">Contacto</a>
+            </nav>
+            
+            {/* Sección principal */}
+            <div className="main-content">
+                {/* Barra de búsqueda y filtros */}
+                <aside className="filters">
+                    <input type="text" placeholder="Búsqueda" className="search-bar" />
+                    <h3>Filtros por categoría</h3>
+                    <ul>
+                        <li>Ingrediente</li>
+                        <li>Variedad de grano</li>
+                        <li>Método</li>
+                        <li>Ranking</li>
+                    </ul>
+                </aside>
+                
+                {/* Lista de recetas */}
+                <section className="recipe-list">
+                    {/* Aquí se renderizan las recetas dinámicamente */}
+                    <div className="recipe-card">
+                        <img src="https://via.placeholder.com/150" alt="Café" />
+                        <h4>Nombre del Café</h4>
+                        <p>⭐ 4.5</p>
+                    </div>
+                </section>
+            </div>
+
+            {/* Footer */}
+            <footer>
+                <p>Coffee-P © Todos los derechos reservados</p>
+            </footer>
         </div>
     );
-    }
+};
+
