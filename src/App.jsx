@@ -9,6 +9,7 @@ import { subirReceta } from './pages/subirReceta'
 import { verReceta } from './pages/verReceta'
 import { Mantenedor } from './pages/Mantenedor'
 import { Ranking } from './pages/Ranking'
+import { Usercard } from './pages/Usercard'
 function App() {
   
 
@@ -23,6 +24,7 @@ function App() {
       <Route path="/verreceta" element={<verReceta/>} />
       <Route path="/mantenedor" element={<Mantenedor/>} />
       <Route path="/ranking" element={<Ranking/>} />
+      <Route path="/usercard" element={<Usercard/>} />
       <Route path="*" element={<h1>Not Found</h1>} />
 
 
