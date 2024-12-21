@@ -6,15 +6,17 @@ import { Miperfil } from './pages/Miperfil'
 import { New } from './pages/new'
 import LoginPage from './pages/Iniciosesion'
 import CreateRecipePage from './pages/CrearReceta'
-import Header from './componets/Lineas'
+import Header from './componets/Lineasup'
+import Footer from './componets/Lineasinf'
 
 function App() {
   
 
   return (
-    <Router>
-      <div>
+    <>
+      <div className="flex flex-col min-h-screen">
         <Header />
+        <main className="flex-grow">
         <Routes> 
           <Route path="/" element={<Home />} />
           <Route path="/alan" element={<Alan />} />
@@ -26,8 +28,10 @@ function App() {
 
 
         </Routes>
+        </main>
+        <Footer />
       </div>
-    </Router>
+    </>
   )
 }
 

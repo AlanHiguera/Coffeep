@@ -11,21 +11,21 @@ const ImageUploader = () => {
   };
 
   return (
-    <div className="p-4 border border-gray-300 rounded">
-      <h3 className="text-lg font-semibold mb-2">Añadir foto</h3>
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-[#E5D3C5] shadow-md rounded-lg border border-gray-300">
+      <h3 className="text-2xl font-bold text-center mb-6">Añadir foto</h3>
       <div
-        className={`border-dashed border-2 rounded p-4 ${
-          image ? "border-green-500" : "border-gray-300"
+        className={`border-dashed border-2 rounded-lg p-6 flex flex-col items-center ${
+          image ? "border-[#A9715D]" : "border-gray-300 bg-gray-100"
         }`}
       >
         {image ? (
           <img
             src={image}
             alt="Previsualización"
-            className="max-h-40 mx-auto mb-4"
+            className="max-h-48 rounded-lg shadow-md mb-4"
           />
         ) : (
-          <p className="text-gray-500 text-center">Arrastra o selecciona una foto</p>
+          <p className="text-gray-500 text-center mb-4">Arrastra o selecciona una foto</p>
         )}
         <input
           type="file"
@@ -36,13 +36,14 @@ const ImageUploader = () => {
         />
         <label
           htmlFor="file-upload"
-          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600"
+          className="bg-[#C0846F] text-white px-6 py-2 rounded-md font-bold cursor-pointer hover:bg-[#A9715D] 
+          transition duration-300"
         >
           Seleccionar foto
         </label>
       </div>
-      <p className="text-sm text-gray-500 mt-2">
-        *Asegúrate de que la imagen cumpla con nuestras normas.
+      <p className="text-sm text-gray-500 mt-4 text-center">
+        *Ante cualquier imagen que incumpla las normas, corres el riesgo de perder tu cuenta.
       </p>
     </div>
   );

@@ -19,11 +19,17 @@ const RecipeForm = () => {
     setIngredients(updatedIngredients);
   };
 
+  const [isAdultOnly, setIsAdultOnly] = useState(false);
+
+  const handleAdultOnlyChange = (e) => {
+    setIsAdultOnly(e.target.checked);
+  };
+
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h2 className="text-xl font-bold mb-4">Crear receta</h2>
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-[#E5D3C5] shadow-md rounded-lg border border-gray-300">
+      <h2 className="text-2xl font-bold underline text-center mb-6">Crear receta</h2>
       <div className="mb-4">
-        <label className="block font-semibold">Nombre de receta</label>
+        <label className="block font-semibold">Nombre de la receta</label>
         <input
           type="text"
           placeholder="Café Kopi Luwak"
@@ -38,7 +44,7 @@ const RecipeForm = () => {
         ></textarea>
       </div>
       <div className="mb-4">
-        <h3 className="font-semibold">Ingredientes</h3>
+        <h3 className="font-semibold">Seleccionar Ingredientes</h3>
         {ingredients.map((ingredient, index) => (
           <div key={index} className="flex items-center gap-2 mb-2">
             <input
@@ -62,7 +68,7 @@ const RecipeForm = () => {
             <button
               type="button"
               onClick={() => removeIngredient(index)}
-              className="text-red-500 hover:underline"
+              className="text-black-500 hover:underline"
             >
               Eliminar
             </button>
@@ -71,7 +77,7 @@ const RecipeForm = () => {
         <button
           type="button"
           onClick={addIngredient}
-          className="mt-2 text-blue-500 hover:underline"
+          className="mt-2 text-black-500 hover:underline"
         >
           Agregar otro ingrediente
         </button>
@@ -90,9 +96,27 @@ const RecipeForm = () => {
           <option value="Aeropress">Aeropress</option>
         </select>
       </div>
-      <button className="bg-blue-600 text-white px-4 py-2 rounded">
+      <div className="flex items-center gap-2 mb-4">
+        <input
+          type="checkbox"
+          id="adult-only"
+          checked={isAdultOnly}
+          onChange={handleAdultOnlyChange}
+          className="w-5 h-5 text-[#C0846F] border-[#C0846F] rounded-full focus:ring-2 focus:ring-[#C0846F] cursor-pointer"
+        />
+        <label htmlFor="adult-only" className="text-gray-700 font-bold cursor-pointer">
+          Restricción de edad
+        </label>
+      </div>
+      <button className="bg-[#C0846F] text-white px-6 py-2 rounded-md font-bold cursor-pointer hover:bg-[#A9715D] 
+          transition duration-300">
         Publicar receta
       </button>
+      <p className="text-center text-black-500 text-sm mt-4">
+      *Al publicar esta receta declaras que la información presente no contiene productos dañinos para la salud 
+      ni presenta uso de lenguaje inadecuado. Ante cualquier incumplimiento de normas, asumes total responsabilidad 
+      de lo presente en la publicación.
+      </p>
     </div>
   );
 };
