@@ -1,13 +1,12 @@
 
 import { ContenidoHome } from "../componets/contenidoHome";
-import Navbar from "../componets/navbarInicioContacto";
+import Navbar from "../componets/navbar";
 
 const Home = () => {
     return(
         <>
         <Navbar/>
         <ContenidoHome/>
-
         </>
     )
 }
