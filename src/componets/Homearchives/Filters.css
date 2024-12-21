@@ -1,0 +1,18 @@
+.filters {
+    width: 200px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+.search-bar {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+.filters ul {
+    list-style: none;
+    padding: 0;
+}
+.filters li {
+    margin: 5px 0;
+}

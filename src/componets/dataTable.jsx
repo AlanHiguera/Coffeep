@@ -1,7 +1,7 @@
 import React from "react";
 import "./dataTable.css";
 
-export const infoMaintainer = () => {
+export const DataTable = () => {
   // Datos de ejemplo
   const data = [
     { id: "01", name: "Peaberry", origin: "Venezuela" },

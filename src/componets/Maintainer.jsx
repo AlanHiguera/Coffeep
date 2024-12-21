@@ -1,7 +1,7 @@
 import React from "react";
 import { Sidebar } from "./Sidebar";
-import { DataTable } from "./infoMaintainer";
-import "./maintainer.css";
+import { DataTable } from "./dataTable";
+import "./Maintainer.css";
 
 export const Maintainer = () => {
   return (
