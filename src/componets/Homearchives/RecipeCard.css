@@ -1,0 +1,11 @@
+.recipe-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    width: 150px;
+}
+.recipe-card img {
+    width: 100%;
+    border-radius: 5px;
+}

@@ -1,0 +1,60 @@
+/* Contenedor general de la sidebar */
+.sidebar {
+  background-color: #f4e4db; /* Color de fondo */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Título de la sidebar */
+.sidebar-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #94674f; /* Color del texto */
+  margin-bottom: 10px;
+  text-align: center;
+  border-bottom: 2px dashed #94674f; /* Línea discontinua debajo del título */
+  padding-bottom: 10px;
+  width: 100%; /* Asegura que la línea ocupe el ancho del contenedor */
+}
+
+/* Lista de botones */
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+/* Botones de la sidebar */
+.sidebar-button {
+  background-color: #d9b6a3; /* Color del botón */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%; /* Botón ocupa todo el ancho */
+  text-align: center;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.sidebar-button:hover {
+  background-color: #94674f; /* Cambia el color al pasar el mouse */
+  transform: scale(1.05); /* Efecto de zoom */
+}
+
+/* Espaciado entre botones */
+.sidebar-menu li {
+  margin-bottom: 10px;
+}
+
+.sidebar-menu li:last-child {
+  margin-bottom: 0;
+}
