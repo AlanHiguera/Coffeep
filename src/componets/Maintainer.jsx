@@ -1,13 +1,10 @@
 import React from "react";
-import { Sidebar } from "./Sidebar";
 import { DataTable } from "./dataTable";
 import "./Maintainer.css";
 
 export const Maintainer = () => {
   return (
     <div className="maintainer-container">
-      {/* Menú lateral */}
-      <Sidebar />
 
       {/* Tabla de datos */}
       <div className="content">

@@ -6,9 +6,9 @@ const Navbar = () => {
         <nav className="navbar">
             <center>
               <div className="navbar-links">
-                    <a href="#" className="navbar-link">Listados</a> 
+                    <a href="#" className="navbar-link">Inicio</a> 
                     <p>|</p>
-                    <a href="#" className="navbar-link">Mantenedor</a> 
+                    <a href="#" className="navbar-link">Contacto</a> 
               </div>
             </center>
             <div className="navbar-user">

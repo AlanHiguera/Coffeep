@@ -3,11 +3,7 @@ import './contenidoHome.css';
 export const ContenidoHome = () => {
     return (
         <div className="home-container">
-            {/* Barra de navegación */}
-            <nav className="navbar">
-                <a href="#">Inicio</a>
-                <a href="#">Contacto</a>
-            </nav>
+
             
             {/* Sección principal */}
             <div className="main-content">

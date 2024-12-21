@@ -1,0 +1,65 @@
+/* Estilos generales para la barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: center; /* Centra los enlaces horizontalmente */
+    align-items: center;    /* Alinea los elementos verticalmente */
+    background-color: #f4e4db;
+    padding: 10px 20px;
+    border-bottom: 1px solid #d9b6a3;
+    position: relative; /* Para posicionar el ícono del usuario */
+}
+
+/* Enlaces de navegación */
+.navbar-links {
+    display: flex;
+    align-items: center; /* Alinea verticalmente los elementos en la barra */
+    gap: 5px; /* Reduce el espacio entre los elementos */
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: #94674f;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 0 5px; /* Reduce el margen interno de los enlaces */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-link:hover {
+    background-color: #d9b6a3;
+    color: white;
+}
+
+.navbar-link.active {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Barra divisoria (opcional) */
+.navbar-links p {
+    margin: 0;
+    color: #94674f;
+    font-size: 16px;
+}
+
+/* Ícono del usuario */
+.navbar-user {
+    position: absolute; /* Posiciona el ícono del usuario a la derecha */
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #94674f;
+}
+
+.user-icon {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.user-icon:hover {
+    background-color: #d9b6a3;
+    color: white;
+}
