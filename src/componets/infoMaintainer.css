@@ -1,0 +1,34 @@
+.info-maintainer {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .info-maintainer th,
+  .info-maintainertd {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .info-maintainerth {
+    background-color: #e6a15a;
+    color: white;
+  }
+  
+  .edit-button,
+  .delete-button {
+    background-color: transparent;
+    border: none;
+    color: #e6a15a;
+    cursor: pointer;
+  }
+  
+  .edit-button:hover {
+    color: #d08c45;
+  }
+  
+  .delete-button:hover {
+    color: #a94442;
+  }
+  

@@ -13,6 +13,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/alan" element={<Alan />} />
       <Route path="/Home" element={<Home />} />
+      <Route path="/mantenedorting" element={<MantenedorTING />} />
       <Route path="/miperfil" element={<Miperfil/>} />  
       <Route path="/new" element={<New/>} />
       <Route path="*" element={<h1>Not Found</h1>} />
