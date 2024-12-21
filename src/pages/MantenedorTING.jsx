@@ -9,7 +9,6 @@ export const MantenedorTING = () => {
         <Navbar />
         <Maintainer />
         <Sidebar />
-        <h1 className="bg-black">Alan</h1>
         </div>
     );
     }
