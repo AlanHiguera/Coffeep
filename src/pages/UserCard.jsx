@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import usercard from '../componets/usercard';
+import UserCard from '../componets/UserCard';
+import UserTable from '../componets/UserTable';
 import navbar from '../componets/navbar';
+import Sidebar from '../componets/Sidebar';
 
 const UserListPage = () => {
   const [usuarios, setUsuarios] = useState([]);

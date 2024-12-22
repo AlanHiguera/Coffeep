@@ -5,11 +5,8 @@ import Home from './pages/Home'
 import { Alan } from './pages/Alan'
 import { Miperfil } from './pages/Miperfil'
 import { New } from './pages/new'
-import { subirReceta } from './pages/subirReceta'
-import { verReceta } from './pages/verReceta'
-import { Mantenedor } from './pages/Mantenedor'
-import { Ranking } from './pages/Ranking'
-import { Usercard } from './pages/Usercard'
+import { Usercard } from './pages/UserCard'
+//import Sidebar from './'
 function App() {
   
 
@@ -20,11 +17,7 @@ function App() {
       <Route path="/alan" element={<Alan />} />
       <Route path="/miperfil" element={<Miperfil/>} />  
       <Route path="/new" element={<New/>} />
-      <Route path="/subirreceta" element={<subirReceta/>} />
-      <Route path="/verreceta" element={<verReceta/>} />
-      <Route path="/mantenedor" element={<Mantenedor/>} />
-      <Route path="/ranking" element={<Ranking/>} />
-      <Route path="/usercard" element={<Usercard/>} />
+      <Route path="/usercard" element={<UserCard/>} />
       <Route path="*" element={<h1>Not Found</h1>} />
 
 

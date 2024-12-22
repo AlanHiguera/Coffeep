@@ -193,3 +193,9 @@ html {
     color: #5a4637;
   }
   
+  .loading {
+    text-align: center;
+    font-size: 18px;
+    color: #7a7a7a;
+    margin-top: 20px;
+}
