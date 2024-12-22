@@ -1,4 +1,4 @@
-import Navbar from "../componets/navbar";
+import Navbar from "../componets/navbarInicioContacto";
 import { Sidebar } from "../componets/Sidebar";
 import { Maintainer } from "../componets/Maintainer";
 import "./MantenedorTING.css"; // Archivo CSS para los estilos del layout

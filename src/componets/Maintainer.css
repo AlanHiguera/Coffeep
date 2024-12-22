@@ -10,7 +10,7 @@
   
   .add-button {
     margin-top: 20px;
-    background-color: #e6a15a;
+    background-color: #c06e1b;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -19,6 +19,6 @@
   }
   
   .add-button:hover {
-    background-color: #d08c45;
+    background-color: #c06e1b;
   }
   
