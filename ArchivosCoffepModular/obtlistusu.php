@@ -1,5 +1,4 @@
 <?php
-//SE PUEDE BORRAR YA QUE NO SE USA
 include 'conexion.php';
 
 $usuarios_html = "";  // Asegúrate de definirlo aquí
