@@ -1,0 +1,103 @@
+html {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+* { /* Reset */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+    
+body {
+    color: #252525;
+    background-color: #f8f4f1;
+}
+    
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d3b8a4;
+    padding: 30px 40px;
+}
+    
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+    
+header nav ul li a {
+    text-decoration: none;
+    color: #252525;
+}
+    
+header .icons {
+    display: flex;
+    gap: 15px;
+}
+    
+header .icons span {
+    width: 26px;
+    height: 26px;
+    background-color: #cfc0b400;
+    border-radius: 50%;
+    display: inline-block;
+}
+  
+nav li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    height: calc(100vh - 100px);
+    padding: 20px;
+}
+
+  .container {
+    padding: 20px;
+  }
+
+  .table-container {
+    margin: 20px auto;
+    width: 90%;
+    background-color: #eae7dc;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #d8c3a5;
+  }
+
+  th {
+    background-color: #d8c3a5;
+  }
+
+  td a {
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  td a.edit {
+    color: #1a73e8;
+  }
+
+  td a.delete {
+    color: #b33030;
+  }
+
+  footer {
+    text-align: center;
+    background-color: #d3b8a4;
+    padding: 20px;
+    font-size: 14px;
+    color: #5a4637;
+  }

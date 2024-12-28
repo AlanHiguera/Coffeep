@@ -1,0 +1,155 @@
+html {
+  font-family: 'Montserrat', sans-serif;
+}
+
+* { /* Reset */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    color: #252525;
+    background-color: #f8f4f1;
+  }
+  
+  header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d3b8a4;
+    padding: 30px 40px;
+  }
+  
+  header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  header nav ul li a {
+    text-decoration: none;
+    color: #252525;
+  }
+  
+  header .icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  header .icons span {
+    width: 26px;
+    height: 26px;
+    background-color: #cfc0b400;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  nav li a:hover {
+    text-decoration: underline;
+  }
+
+  main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    padding: 20px;
+  }
+
+.container {
+  height: 580px;
+    display: flex;
+    padding: 20px;
+}
+
+.sidebar {
+    background-color: #eae7dc;
+    padding: 15px;
+    width: 25%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.sidebar-button {
+    background-color: #d8c3a5;
+    border: none;
+    color: #000;
+    padding: 10px 15px;
+    width: 100%;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.content {
+    flex-grow: 1;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 20px;
+}
+
+table th, table td {
+border: 1px solid #d8c3a5;
+padding: 10px;
+text-align: left;
+}
+
+table th {
+background-color: #eae7dc;
+font-weight: bold;
+}
+
+table td {
+background-color: #fff;
+}
+
+table td a {
+text-decoration: none;
+font-weight: bold;
+}
+
+table td a:hover {
+text-decoration: underline;
+}
+
+.add-link {
+display: block;
+margin-top: 10px;
+text-decoration: none;
+font-weight: bold;
+color: #000;
+}
+
+/* Estilo del botón de editar */
+button.editar {
+  background: none;
+  border: none;
+  color: blue; /* Color del texto */
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+footer {
+  text-align: center;
+  background-color: #d3b8a4;
+  padding: 20px;
+  font-size: 14px;
+  color: #5a4637;
+}
