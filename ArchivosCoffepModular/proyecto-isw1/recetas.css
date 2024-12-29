@@ -1,0 +1,94 @@
+html {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+* { /* Reset */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    color: #252525;
+    background-color: #f8f4f1;
+}
+    
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d3b8a4;
+    padding: 30px 40px;
+}
+    
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+    
+header nav ul li a {
+    text-decoration: none;
+    color: #252525;
+}
+    
+header .icons {
+    display: flex;
+    gap: 15px;
+}
+    
+header .icons span {
+    width: 26px;
+    height: 26px;
+    background-color: #cfc0b400;
+    border-radius: 50%;
+    display: inline-block;
+}
+  
+nav li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+    flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+}
+
+.recipe-detail {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-detail img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.recipe-detail h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.recipe-detail p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.recipe-detail h3 {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}  
+
+footer {
+    text-align: center;
+    background-color: #d3b8a4;
+    padding: 20px;
+    font-size: 14px;
+}
