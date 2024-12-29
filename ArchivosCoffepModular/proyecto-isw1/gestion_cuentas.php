@@ -45,50 +45,65 @@ if (!isset($_SESSION['user'])) {
   <div class="container">
     <div class="table-container">
       <h2>Lista de Usuarios</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Correo</th>
-            <th>nombre</th>
-            <th>Apellido</th>
-            <th>Rol</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
         <tbody>
-          <?php
-            // Conexión a la base de datos
-            include "conexion.php";
+        <?php
+        // Conexión a la base de datos
+        include "conexion.php";
 
-            // Consulta para obtener los usuarios
-
-            include 'listado_usuarios.php'; // Archivo con la función ListadoTipoIngredientes
-            $usuarios = obtenerUsuarios($conn);
-
-            if (!empty($usuarios)) {
-                foreach ($usuarios as $row) {
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['Usu_nickname']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['Usu_correo']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['Usu_nombre']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['Usu_apellido']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['Usu_rol']) . "</td>";
-                    echo "<td><a class='edit' href='#" . htmlspecialchars($row['Usu_nickname']) . "'>Editar</a></td>";
-                    echo "<td><a class='delete' href='#" . htmlspecialchars($row['Usu_nickname']) . "'>Eliminar</a></td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7'>No hay usuarios registrados</td></tr>";
+        // Obtener los usuarios desde la función
+        include 'listado_usuarios.php';
+        $usuarios = obtenerUsuarios($conn);
+        
+        echo "<table>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th>Nickname</th>";
+        echo "<th>Correo</th>";
+        echo "<th>Nombre</th>";
+        echo "<th>Apellido</th>";
+        echo "<th>Rol</th>";
+        echo "<th>Estado</th>";
+        echo "<th>Cambiar estado</th>";
+        echo "<th>Editar datos</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        
+        if (!empty($usuarios)) {
+            foreach ($usuarios as $row) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['Usu_nickname']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Usu_correo']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Usu_nombre']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Usu_apellido']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Usu_rol']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['Usu_estado']) . "</td>";
+        
+                // Enlace para cambiar el estado
+                echo "<td><a class='change-status' href='cambiar_estado.php?nickname=" . htmlspecialchars($row['Usu_nickname']) . "'>Cambiar estado</a></td>";
+        
+                // Formulario para editar nombre y apellido dentro de la tabla
+                echo "<td>";
+                echo "<form action='editar_usuario.php' method='POST'>";
+                echo "<input type='hidden' name='nickname' value='" . htmlspecialchars($row['Usu_nickname']) . "'>";
+                echo "<input type='text' name='nombre' value='" . htmlspecialchars($row['Usu_nombre']) . "' required>";
+                echo "<input type='text' name='apellido' value='" . htmlspecialchars($row['Usu_apellido']) . "' required>";
+                echo "<input type='email' name='correo' value='" . htmlspecialchars($row['Usu_correo']) . "' required>";
+                echo "<button type='submit'>Actualizar</button>";
+                echo "</form>";
+                echo "</td>";
+                echo "</tr>";
             }
-            
-            echo '</tbody>';
-            echo '</table>';
-            
-            // Cerrar la conexión
-            $conn->close();
-            ?>
+        } else {
+            echo "<tr><td colspan='8'>No hay usuarios registrados</td></tr>";
+        }
+        
+        echo '</tbody>';
+        echo '</table>';
+        
+        // Cerrar la conexión a la base de datos
+        $conn->close();
+        ?>
         </tbody>
       </table>
     </div>

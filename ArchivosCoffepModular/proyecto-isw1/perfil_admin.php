@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
         <h3>Gestión</h3>
         <a href="crear_receta.php"><button>Crear Receta</button></a>
         <a href="mantenedor_ting.php"><button>Tipo de ingrediente</button></a>
-        <a href="generar_listusu.php"><button>Listado de Usuarios</button></a>
+        <a href="gestion_cuentas.php"><button>Listado de Usuarios</button></a>
         <a href="cerrar_sesion.php"><button>Cerrar Sesión</button></a>
       </div>
     </div>

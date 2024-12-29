@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: iniciar_sesion.php"); // Redirige al inicio de sesión si no está autenticado
+    exit();
+}
 include 'conexion.php'; // Incluye la conexión a la base de datos
 
 if (isset($_GET['id'])) {

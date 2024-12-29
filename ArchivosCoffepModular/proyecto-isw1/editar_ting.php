@@ -1,7 +1,11 @@
 
 <?php
 include 'conexion.php'; // Conexión a la base de datos
-
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: iniciar_sesion.php"); // Redirige al inicio de sesión si no está autenticado
+    exit();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
     $nombre = $_POST['nombre'];

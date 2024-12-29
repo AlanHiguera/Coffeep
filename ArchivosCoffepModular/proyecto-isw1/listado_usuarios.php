@@ -1,9 +1,10 @@
 <?php
+
 include 'conexion.php';
 
 function obtenerUsuarios($conn) {
     // Consulta SQL para obtener los usuarios
-    $sql_check = "SELECT Usu_nickname, Usu_correo, Usu_nombre, Usu_apellido, Usu_rol FROM usuario";
+    $sql_check = "SELECT Usu_nickname, Usu_correo, Usu_nombre, Usu_apellido, Usu_rol, Usu_estado FROM usuario";
     
     // Ejecutar la consulta
     $result = $conn->query($sql_check);
