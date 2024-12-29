@@ -1,5 +1,8 @@
 <?php
+<<<<<<< HEAD
 //SE PUEDE BORRAR YA QUE NO SE USA
+=======
+>>>>>>> 940cfcafffbfe6b40f290b33d7ce9ec55700ee38
 include 'conexion.php';
 
 $usuarios_html = "";  // Asegúrate de definirlo aquí

@@ -185,7 +185,11 @@ table td a:hover {
                 echo '<td>
                         <button onclick="mostrarFormulario(\'' . htmlspecialchars($row["Tip_idtipo"]) . '\')">Editar</button>
                       </td>';
+<<<<<<< HEAD
                 echo '<td><a href="eliminar.php?id=' . urlencode($row["Tip_idtipo"]) . '" style="color: red; text-decoration: none;" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este registro?\')">Eliminar</a></td>';
+=======
+                echo '<td><a href="eliminar_usuario.php?id=' . urlencode($row["Tip_idtipo"]) . '" style="color: red; text-decoration: none;" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este registro?\')">Eliminar</a></td>';
+>>>>>>> 940cfcafffbfe6b40f290b33d7ce9ec55700ee38
                 echo '</tr>';
             }
         } else {
@@ -209,7 +213,11 @@ table td a:hover {
                     <p id="edit-mensaje" style="margin-top: 10px; font-weight: bold;"></p>
         </div>
                 
+<<<<<<< HEAD
                 <!-- Formulario para agregar (sin cambios) -->
+=======
+                <!-- Formulario para agregar -->
+>>>>>>> 940cfcafffbfe6b40f290b33d7ce9ec55700ee38
         <div id="formulario">
             <form name="nombre" method="POST" action="agregaring.php" onsubmit="return procesarFormulario(event);">
                 <label for="nombre">Nombre del ingrediente:</label>
@@ -267,7 +275,11 @@ table td a:hover {
                 });
             }
                 
+<<<<<<< HEAD
                     // Función para procesar el agregar (sin cambios)
+=======
+                    // Función para procesar el agregar 
+>>>>>>> 940cfcafffbfe6b40f290b33d7ce9ec55700ee38
             function procesarFormulario(event) {
                 event.preventDefault(); // Evitar el envío tradicional del formulario
                 

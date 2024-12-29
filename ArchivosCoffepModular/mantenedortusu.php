@@ -144,8 +144,13 @@
                 echo "<td>" . $row['Usu_nombre'] . "</td>";
                 echo "<td>" . $row['Usu_apellido'] . "</td>";
                 echo "<td>" . $row['Usu_rol'] . "</td>";
+<<<<<<< HEAD
                 echo "<td><a class='edit' href='editar_usuario.php?id=" . $row['Usu_nickname'] . "'>Editar</a></td>";
                 echo "<td><a class='delete' href='eliminar_usuario.php?id=" . $row['Usu_nickname'] . "'>Eliminar</a></td>";
+=======
+                echo "<td><a class='edit' href='editar_usuario.php?nickname=" . $row['Usu_nickname'] . "'>Editar</a></td>";
+                echo "<td><a class='delete' href='eliminar_usuario.php?nickname=" . $row['Usu_nickname'] . "'>Eliminar</a></td>";
+>>>>>>> 940cfcafffbfe6b40f290b33d7ce9ec55700ee38
                 echo "</tr>";
                 }
             } else {
