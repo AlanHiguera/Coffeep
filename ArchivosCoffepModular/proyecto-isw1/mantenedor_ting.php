@@ -53,10 +53,11 @@ if (!isset($_SESSION['user'])) {
                 <?php
                 include 'conexion.php';
                 // Consulta SQL
-                $sql_check = "SELECT tipo_ingrediente.Tip_idtipo, tipo_ingrediente.Tip_nombre FROM tipo_ingrediente LIMIT 10";
-                $result = $conn->query($sql_check);
-                
-                // Comienza a generar la tabla
+                include 'listado_tipo_ing.php'; // Archivo con la función ListadoTipoIngredientes
+
+                // Obtener los ingredientes desde la base de datos
+                $ingredientes = ListadoTipoIngredientes($conn, 10); // Limitar a 10 registros
+        
                 echo '<table>';
                 echo '<thead>';
                 echo '<tr>';
@@ -68,20 +69,22 @@ if (!isset($_SESSION['user'])) {
                 echo '</thead>';
                 echo '<tbody>';
                 
-                // Generar filas
-                if ($result && $result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
+                // Generar filas de la tabla con los datos obtenidos
+                if (!empty($ingredientes)) {
+                    foreach ($ingredientes as $row) {
                         echo '<tr>';
                         echo '<td>' . htmlspecialchars($row["Tip_idtipo"]) . '</td>';
-                        echo '<td id="name-' . $row["Tip_idtipo"] . '">' . htmlspecialchars($row["Tip_nombre"]) . '</td>';
+                        echo '<td id="name-' . htmlspecialchars($row["Tip_idtipo"]) . '">' . htmlspecialchars($row["Tip_nombre"]) . '</td>';
                         echo '<td>
-                                <button class="editar" onclick="mostrarFormulario(\'' . $row["Tip_idtipo"] . '\')">Editar</button>
+                                <a class="edit" href="#' . htmlspecialchars($row["Tip_idtipo"]) . '" style="color: blue; text-decoration: none;">Editar</a>
                               </td>';
-                        echo '<td><a href="eliminar_ting.php?id=' . urlencode($row["Tip_idtipo"]) . '" style="color: red; text-decoration: none;" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este registro?\')">Eliminar</a></td>';
+                        echo '<td>
+                                <a href="eliminar_ting.php?id=' . urlencode($row["Tip_idtipo"]) . '" style="color: red; text-decoration: none;" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este registro?\')">Eliminar</a>
+                              </td>';
                         echo '</tr>';
                     }
                 } else {
-                    echo '<tr><td colspan="5">No se encontraron resultados.</td></tr>';
+                    echo '<tr><td colspan="4">No se encontraron resultados.</td></tr>';
                 }
                 echo '</tbody>';
                 echo '</table>';
@@ -104,7 +107,7 @@ if (!isset($_SESSION['user'])) {
                 <!-- Formulario para agregar (sin cambios) -->
                 <div id="formulario">
                     <form name="nombre" method="POST" action="agregar_ting.php" onsubmit="return procesarFormulario(event);">
-                        <label for="nombre">Nombre del ingrediente:</label>
+                        <label for="nombre">Nombre del tipo de ingrediente a agregar:</label>
                         <input type="text" id="nombre" name="nombre" placeholder="Ejemplo: Azúcar" required>
                         <button type="submit">Guardar</button>
                     </form>
