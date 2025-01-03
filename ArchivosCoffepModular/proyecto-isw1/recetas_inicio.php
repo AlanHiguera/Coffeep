@@ -7,7 +7,6 @@ if (!isset($_SESSION['user'])) {
 
 // Incluir el archivo de conexión
 include 'conexion.php';
-
 // Verificar si se seleccionó el filtro de ranking
 $isRankingChecked = isset($_GET['ranking']) && $_GET['ranking'] == '1';
 

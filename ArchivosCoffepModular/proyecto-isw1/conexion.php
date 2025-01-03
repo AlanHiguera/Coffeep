@@ -3,7 +3,7 @@
 $host = "localhost";
 $user = "root"; // Usuario de MySQL
 $password = ""; // Contraseña de MySQL
-$database = "coffe-p"; // Nombre de la base de datos
+$database = "coffeep"; // Nombre de la base de datos
 
 // Crear conexión
 $conn = new mysqli($host, $user, $password, $database);

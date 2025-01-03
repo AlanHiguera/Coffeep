@@ -44,7 +44,7 @@ if (!isset($_SESSION['user'])) {
     <div class="container">
         <div class="sidebar">
             <h3>Gestión</h3>
-            <a href="generar_listusu.php"><button class="sidebar-button">Listado Usuarios</button></a>
+            <a href="gestion_cuentas.php"><button class="sidebar-button">Listado Usuarios</button></a>
             <button class="sidebar-button">Tipo de ingrediente</button>
         </div>
 
@@ -206,6 +206,6 @@ if (!isset($_SESSION['user'])) {
 <!-- Pie de página -->
 <footer>
     <p>Coffee-P &copy; Todos los derechos reservados.</p>
-  </footer>
+</footer>
 </body>
 </html>
