@@ -31,8 +31,17 @@ $query = "
 ";
 
 if ($ingrediente) {
-  $query .= " AND I.Ing_iding IN (" . implode(',', $ingrediente) . ")";
+    // Asegurarse de que cada receta tenga todos los ingredientes seleccionados
+    $query .= "
+    AND R.Rec_idrec IN (
+        SELECT CI.Can_idrec
+        FROM cantidad_ingrediente CI
+        WHERE CI.Can_iding IN (" . implode(',', $ingrediente) . ")
+        GROUP BY CI.Can_idrec
+        HAVING COUNT(DISTINCT CI.Can_iding) = " . count($ingrediente) . "
+    )";
 }
+
 if ($grano) {
   $query .= " AND G.Gra_idgrano = $grano";
 }
@@ -54,7 +63,7 @@ $result = $conn->query($query);
   <title>Inicio - Coffee-P</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilo.css">
-  <link rel="stylesheet" href="recetas.css">
+  <link rel="stylesheet" href="receta.css">
   <script>
     function toggleFilter(filterId) {
       const filter = document.getElementById(filterId);
@@ -84,78 +93,74 @@ $result = $conn->query($query);
         </nav>
     </header>
 
-  <main>
-      <div class="container">
-      <div>
-      <form method="GET" action="">
-      <!-- Contenedor general de los filtros con ajuste a la izquierda -->
-      <div style="position: relative; margin-left: -15%; width: 300px;">
+    <main style="display: flex; gap: 20px; padding: 20px;">
+  <!-- Contenedor de filtros -->
+  <aside style="width: 300px;">
+    <form method="GET" action="">
+      <div style="position: relative;">
+        <h3>Filtros por categoría</h3>
 
-        <div style="margin-bottom: 20px;">
-          <h3>Filtros por categoría</h3>
+        <!-- Filtro por ingredientes -->
+        <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
+            <input type="checkbox" onclick="toggleFilter('ingredientesFilter')" style="margin-right: 10px;">
+            Ingrediente
+          </label>
+          <div id="ingredientesFilter" style="display: none; margin-top: 10px;">
+            <?php while ($row = $ingredientes_result->fetch_assoc()): ?>
+              <label style="display: block; margin-bottom: 5px; color: #333;">
+                <input type="checkbox" name="ingrediente[]" value="<?= $row['Ing_iding'] ?>" style="margin-right: 8px;">
+                <?= $row['Ing_nombre'] ?>
+              </label>
+            <?php endwhile; ?>
+          </div>
+        </div>
 
-          <!-- Filtro por ingredientes -->
-          <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
-              <input type="checkbox" onclick="toggleFilter('ingredientesFilter')" style="margin-right: 10px;">
-              Ingrediente
-            </label>
-            <div id="ingredientesFilter" style="display: none; margin-top: 10px;">
-              <?php while ($row = $ingredientes_result->fetch_assoc()): ?>
-                <label style="display: block; margin-bottom: 5px; color: #333;">
-                  <input type="checkbox" name="ingrediente[]" value="<?= $row['Ing_iding'] ?>" style="margin-right: 8px;">
-                  <?= $row['Ing_nombre'] ?>
-                </label>
+        <!-- Filtro por tipo de grano -->
+        <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
+            <input type="checkbox" onclick="toggleFilter('granoFilter')" style="margin-right: 10px;">
+            Tipo de Grano
+          </label>
+          <div id="granoFilter" style="display: none; margin-top: 10px;">
+            <select name="grano" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">Seleccione un grano</option>
+              <?php while ($row = $granos_result->fetch_assoc()): ?>
+                <option value="<?= $row['Gra_idgrano'] ?>"><?= $row['Gra_nombre'] ?></option>
               <?php endwhile; ?>
-            </div>
+            </select>
           </div>
+        </div>
 
-          <!-- Filtro por tipo de grano -->
-          <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
-              <input type="checkbox" onclick="toggleFilter('granoFilter')" style="margin-right: 10px;">
-              Tipo de Grano
-            </label>
-            <div id="granoFilter" style="display: none; margin-top: 10px;">
-              <select name="grano" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                <option value="">Seleccione un grano</option>
-                <?php while ($row = $granos_result->fetch_assoc()): ?>
-                  <option value="<?= $row['Gra_idgrano'] ?>"><?= $row['Gra_nombre'] ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
+        <!-- Filtro por nickname -->
+        <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
+            <input type="checkbox" onclick="toggleFilter('nicknameFilter')" style="margin-right: 10px;">
+            Nickname
+          </label>
+          <div id="nicknameFilter" style="display: none; margin-top: 10px;">
+            <select name="nickname" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">Seleccione un nickname</option>
+              <?php while ($row = $nicknames_result->fetch_assoc()): ?>
+                <option value="<?= $row['Rec_nickname'] ?>"><?= $row['Rec_nickname'] ?></option>
+              <?php endwhile; ?>
+            </select>
           </div>
+        </div>
 
-          <!-- Filtro por nickname -->
-          <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
-              <input type="checkbox" onclick="toggleFilter('nicknameFilter')" style="margin-right: 10px;">
-              Nickname
-            </label>
-            <div id="nicknameFilter" style="display: none; margin-top: 10px;">
-              <select name="nickname" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                <option value="">Seleccione un nickname</option>
-                <?php while ($row = $nicknames_result->fetch_assoc()): ?>
-                  <option value="<?= $row['Rec_nickname'] ?>"><?= $row['Rec_nickname'] ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
-          </div>
-
-          <!-- Filtro por método -->
-          <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
-              <input type="checkbox" onclick="toggleFilter('metodoFilter')" style="margin-right: 10px;">
-              Método
-            </label>
-            <div id="metodoFilter" style="display: none; margin-top: 10px;">
-              <select name="metodo" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                <option value="">Seleccione un método</option>
-                <?php while ($row = $metodos_result->fetch_assoc()): ?>
-                  <option value="<?= $row['Rec_metodo'] ?>"><?= $row['Rec_metodo'] ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
+        <!-- Filtro por método -->
+        <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
+            <input type="checkbox" onclick="toggleFilter('metodoFilter')" style="margin-right: 10px;">
+            Método
+          </label>
+          <div id="metodoFilter" style="display: none; margin-top: 10px;">
+            <select name="metodo" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">Seleccione un método</option>
+              <?php while ($row = $metodos_result->fetch_assoc()): ?>
+                <option value="<?= $row['Rec_metodo'] ?>"><?= $row['Rec_metodo'] ?></option>
+              <?php endwhile; ?>
+            </select>
           </div>
         </div>
 
@@ -165,33 +170,33 @@ $result = $conn->query($query);
         </button>
       </div>
     </form>
+  </aside>
+
+  <!-- Contenedor de recetas -->
+  <section style="flex: 1;">
+    <div class="recipes">
+      <?php if ($result->num_rows > 0): ?>
+        <?php while ($row = $result->fetch_assoc()): ?>
+          <a href="recetas.php?id=<?= $row['Rec_idrec'] ?>" class="recipe-link">
+            <div class="recipe-card">
+              <?php
+              $imageData = base64_encode($row['Rec_foto']);
+              $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+              ?>
+              <img src="<?= $imageSrc ?>" alt="<?= $row['Rec_nombre'] ?>">
+              <h4><?= $row['Rec_nombre'] ?></h4>
+              <p class="rating">⭐ <?= $row['Rec_calificacion'] ?></p>
+              <span class="tag"><?= $row['Rec_clasificacion'] ?></span>
+              <p><?= $row['Rec_nickname'] ?></p>
+            </div>
+          </a>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <p>No hay recetas disponibles.</p>
+      <?php endif; ?>
     </div>
-      <!-- Mostrar recetas filtradas -->
-      
-      <section class="recipes">
-        <?php if ($result->num_rows > 0): ?>
-          <?php while ($row = $result->fetch_assoc()): ?>
-            <a href="recetas.php?id=<?= $row['Rec_idrec'] ?>" class="recipe-link">
-              <div class="recipe-card">
-                <?php
-                $imageData = base64_encode($row['Rec_foto']);
-                $imageSrc = 'data:image/jpeg;base64,' . $imageData;
-                ?>
-                <img src="<?= $imageSrc ?>" alt="<?= $row['Rec_nombre'] ?>">
-                <h4><?= $row['Rec_nombre'] ?></h4>
-                <p class="rating">⭐ <?= $row['Rec_calificacion'] ?></p>
-                <span class="tag"><?= $row['Rec_clasificacion'] ?></span>
-                <p><?= $row['Rec_nickname'] ?></p>
-              </div>
-            </a>
-          <?php endwhile; ?>
-        <?php else: ?>
-          <p>No hay recetas disponibles.</p>
-        <?php endif; ?>
-        <?php $conn->close(); ?>
-      </div>
-        </section>
-  </main>
+  </section>
+</main>
 
   <footer>
     <p>Coffee-P &copy; Todos los derechos reservados.</p>

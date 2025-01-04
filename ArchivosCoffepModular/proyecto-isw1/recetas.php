@@ -26,6 +26,10 @@ if (isset($_GET['id'])) {
     echo "ID de receta no especificado.";
     exit;
 }
+
+// Variable para mostrar el mensaje
+$mostrarMensaje = false;
+
 // Manejar el envío de la calificación
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
     $calificacion = floatval($_POST['calificacion']);
@@ -55,7 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
         $conn->query($sqlActualizarReceta);
     }
 
-    echo "<p>¡Gracias por tu calificación!</p>";
+    // Activar el mensaje
+    $mostrarMensaje = true;
 }
 ?>
 
@@ -100,6 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
 
     <!-- Contenido principal -->
     <main>
+        <?php if ($mostrarMensaje): ?>
+            <div id="mensaje-calificacion">
+                ¡Gracias por tu calificación! ☕✨
+            </div>
+        <?php endif; ?>
         <div class="recipe-detail">
             <img src="data:image/jpeg;base64,<?= base64_encode($receta['Rec_foto']) ?>" alt="<?= $receta['Rec_nombre'] ?>">
             <h1><?= $receta['Rec_nombre'] ?></h1>
@@ -121,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
             <form method="POST" class="rating-form">
                 <label for="calificacion">Califica esta receta:</label>
                 <div class="stars">
-                <input type="radio" id="star5" name="calificacion" value="5" />
+                    <input type="radio" id="star5" name="calificacion" value="5" />
                     <label for="star5" class="starelement"></label>
 
                     <input type="radio" id="star4" name="calificacion" value="4" />
@@ -145,5 +155,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
     <footer>
         <p>Coffee-P &copy; Todos los derechos reservados.</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mensaje = document.getElementById('mensaje-calificacion');
+            if (mensaje) {
+                setTimeout(() => {
+                    mensaje.style.transition = "opacity 0.5s ease";
+                    mensaje.style.opacity = "0"; // Desvanecer
+                    setTimeout(() => mensaje.remove(), 500); // Eliminar después de 0.5 segundos
+                }, 2000); // Esperar 3 segundos
+            }
+        });
+    </script>
 </body>
 </html>

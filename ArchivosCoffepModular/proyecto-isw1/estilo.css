@@ -207,9 +207,12 @@ main {
 
 footer {
   text-align: center;
-  background-color: #d3b8a4;
-  padding: 20px;
+  background-color: #d6b8a9; /* Color similar al tema */
+  padding: 10px 20px;
   font-size: 14px;
-  position:absolute;
-  bottom:0;
+  color: #6b4f33;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
