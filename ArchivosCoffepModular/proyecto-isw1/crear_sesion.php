@@ -26,7 +26,12 @@ if ($result->num_rows > 0) {
         // Contraseña correcta, iniciar sesión
         echo "Inicio de sesión exitoso.";
         // Redirigir a la página principal o dashboard
-        header("Location: perfil_admin.php");
+        if (trim($row['Usu_rol']) === 'Administrador'){
+            header("Location: perfil_admin.php");
+        }
+        else{
+            header("Location: miperfil.php");
+        }
         exit();
     } else {
         // Contraseña incorrecta

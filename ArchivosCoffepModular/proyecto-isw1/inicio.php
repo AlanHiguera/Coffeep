@@ -20,6 +20,7 @@ $ingrediente = isset($_GET['ingrediente']) ? $_GET['ingrediente'] : null;
 $grano = isset($_GET['grano']) ? $_GET['grano'] : null;
 $nickname = isset($_GET['nickname']) ? $_GET['nickname'] : null;
 $metodo = isset($_GET['metodo']) ? $_GET['metodo'] : null;
+$ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : null;
 
 $query = "
   SELECT DISTINCT R.*
@@ -31,7 +32,6 @@ $query = "
 ";
 
 if ($ingrediente) {
-    // Asegurarse de que cada receta tenga todos los ingredientes seleccionados
     $query .= "
     AND R.Rec_idrec IN (
         SELECT CI.Can_idrec
@@ -52,6 +52,10 @@ if ($metodo) {
   $query .= " AND R.Rec_metodo = '$metodo'";
 }
 
+if ($ordenar === 'ranking') {
+  $query .= " ORDER BY R.Rec_calificacion DESC";
+}
+
 $result = $conn->query($query);
 ?>
 
@@ -70,30 +74,40 @@ $result = $conn->query($query);
       filter.style.display = filter.style.display === 'block' ? 'none' : 'block';
     }
   </script>
-    <header>
-        <nav>
+</head>
+<body>
+<header>
+    <nav>
         <ul>
             <li><a href="inicio.php">Inicio</a></li>
             <li><a href="contacto.php">Contacto</a></li>
         </ul>
         <div class="icons">
-            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
             <span class="user">
-            <?php if (isset($_SESSION['user'])): ?>
-            <a href="perfil_admin.php">
-                <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-            </a>
-            <?php else: ?>
-            <a href="registro.html">
-                <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-            </a>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; 
+            else: ?>
+                <a href="registro.html">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
             <?php endif; ?>
             </span>
         </div>
-        </nav>
-    </header>
+    </nav>
+</header>
 
-    <main style="display: flex; gap: 20px; padding: 20px;">
+<main style="display: flex; gap: 20px; padding: 20px;">
   <!-- Contenedor de filtros -->
   <aside style="width: 300px;">
     <form method="GET" action="">
@@ -168,6 +182,11 @@ $result = $conn->query($query);
         <button type="submit" style="display: block; margin-top: 20px; padding: 10px 20px; background-color: #b3876f; color: white; border: none; border-radius: 5px; cursor: pointer;">
           Aplicar filtros
         </button>
+
+        <!-- Botón de ranking -->
+        <button type="submit" name="ordenar" value="ranking" style="display: block; margin-top: 20px; padding: 10px 20px; background-color: #b3876f; color: white; border: none; border-radius: 5px; cursor: pointer;">
+          Ordenar por Ranking
+        </button>
       </div>
     </form>
   </aside>
@@ -198,8 +217,8 @@ $result = $conn->query($query);
   </section>
 </main>
 
-  <footer>
-    <p>Coffee-P &copy; Todos los derechos reservados.</p>
-  </footer>
+<footer>
+  <p>Coffee-P &copy; Todos los derechos reservados.</p>
+</footer>
 </body>
 </html>
