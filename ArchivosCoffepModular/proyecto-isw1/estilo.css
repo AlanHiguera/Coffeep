@@ -57,6 +57,7 @@ main {
 .container {
     display: flex;
     max-width: 1200px;
+    min-height: 800px;
     margin: 2rem auto;
     gap: 2rem;
 }
@@ -209,4 +210,6 @@ footer {
   background-color: #d3b8a4;
   padding: 20px;
   font-size: 14px;
+  position:absolute;
+  bottom:0;
 }

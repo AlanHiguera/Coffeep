@@ -54,26 +54,40 @@ $result = $conn->query($query);
   <title>Inicio - Coffee-P</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="recetas.css">
   <script>
     function toggleFilter(filterId) {
       const filter = document.getElementById(filterId);
       filter.style.display = filter.style.display === 'block' ? 'none' : 'block';
     }
   </script>
-</head>
-<body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <nav>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
+            <span class="user">
+            <?php if (isset($_SESSION['user'])): ?>
+            <a href="perfil_admin.php">
+                <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
+            </a>
+            <?php else: ?>
+            <a href="registro.html">
+                <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
+            </a>
+            <?php endif; ?>
+            </span>
+        </div>
+        </nav>
+    </header>
 
   <main>
-        <div class="container">
-        <form method="GET" action="">
+      <div class="container">
+      <div>
+      <form method="GET" action="">
       <!-- Contenedor general de los filtros con ajuste a la izquierda -->
       <div style="position: relative; margin-left: -15%; width: 300px;">
 
@@ -151,9 +165,10 @@ $result = $conn->query($query);
         </button>
       </div>
     </form>
-
+    </div>
       <!-- Mostrar recetas filtradas -->
-      <div class="recipes">
+      
+      <section class="recipes">
         <?php if ($result->num_rows > 0): ?>
           <?php while ($row = $result->fetch_assoc()): ?>
             <a href="recetas.php?id=<?= $row['Rec_idrec'] ?>" class="recipe-link">
@@ -175,7 +190,7 @@ $result = $conn->query($query);
         <?php endif; ?>
         <?php $conn->close(); ?>
       </div>
-    </div>
+        </section>
   </main>
 
   <footer>

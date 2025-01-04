@@ -1,0 +1,34 @@
+/* Contenedor de estrellas con dirección invertida */
+.stars {
+    display: flex;
+    flex-direction: row-reverse; /* Invertir el flujo de los elementos */
+    justify-content: center;
+    gap: 10px; /* Espaciado entre estrellas */
+}
+
+/* Ocultar los botones de radio */
+.stars input[type="radio"] {
+    display: none;
+}
+
+/* Estilo base de las estrellas */
+.stars label.starelement {
+    width: 50px;
+    height: 50px;
+    background-color: gray; /* Estrellas no seleccionadas en gris */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Estilo para las estrellas seleccionadas y las anteriores */
+.stars input[type="radio"]:checked ~ label.starelement {
+    background-color: gold; /* Estrellas seleccionadas y previas en dorado */
+}
+
+/* Estilo para el hover (colorea estrellas mientras se pasa el ratón) */
+.stars label.starelement:hover,
+.stars label.starelement:hover ~ label.starelement {
+    background-color: gold;
+}
