@@ -53,14 +53,17 @@ html {
       text-decoration: underline;
   }
   main {
-      flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
-      padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(200vh - 100px);
+    padding: 20px;
   }
   
   .form-container {
     display: flex;
     gap: 20px;
-    width: 100%;
+    width: 1200px;
   }
   
   .form-content {

@@ -26,7 +26,7 @@ if (!isset($_SESSION['user'])) {
       <ul>
         <li><a href="inicio.php">Inicio</a></li>
         <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Infromación</a></li>
+        <li><a href="guia.php">Información</a></li>
       </ul>
       <div class="icons">
         <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
@@ -51,12 +51,19 @@ if (!isset($_SESSION['user'])) {
         <div class="accordion-item">
             <div class="accordion-header">Medidas y conversiones</div>
             <div class="accordion-content">
-            <p>Conoce las conversiones básicas para cocinar: </p>
+            <p>Conoce las conversiones básicas para cocinar (aprox.): </p>
             <ul>
                 <li>1 cucharada = 10 g</li>
-                <li>1 g = 1 ml (en agua)</li>
                 <li>1 taza = 240 ml</li>
                 <li>1 cucharadita = 5 g</li>
+            </ul>
+            <p>Conversión de gramos a mililitros</p>
+            <ul>
+                <li>Agua: 1 gramo = 1 ml</li>
+                <li>Leche líquida: 1 g = 0.970874 ml</li>
+                <li>Aceite de cocina: 1 g = 1.136364 ml</li>
+                <li>Harina: 1 g = 1.890359 ml</li>
+                <li>Azúcar: 1 g = 1.111111 ml</li>
             </ul>
             <p>Este conocimiento te ayudará a seguir recetas con mayor precisión.</p>
             </div>
@@ -79,6 +86,9 @@ if (!isset($_SESSION['user'])) {
             </ul>
             </div>
         </div>
+    </div>
+    <div class="logo-container-forms">
+        <img src="images/logo_coffee-p.png" alt="Logo Coffee-P" class="logo">
     </div>
 </main>
 

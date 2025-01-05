@@ -1,3 +1,14 @@
+<?php
+$error_message = "";
+if (isset($_GET['error'])) {
+    if ($_GET['error'] === "usuario_no_existe") {
+        $error_message = "El usuario no existe. Por favor, regístrate.";
+    } elseif ($_GET['error'] === "contraseña_incorrecta") {
+        $error_message = "La contraseña es incorrecta. Inténtalo de nuevo.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,7 +28,7 @@
         <ul>
             <li><a href="inicio.php">Inicio</a></li>
             <li><a href="contacto.php">Contacto</a></li>
-            <li><a href="guia.php">Infromación</a></li>
+            <li><a href="guia.php">Información</a></li>
         </ul>
         <div class="icons">
             <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
@@ -46,29 +57,29 @@
 
   <!-- Contenido principal -->
   <main>
-    <div class="form-container">
-      <div class="form-content">
-        <h1>Iniciar Sesión</h1>
-        <form method="POST" action="crear_sesion.php">
-          <div class="form-group">
-            <label for="username">Nombre de usuario</label>
-            <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+      <div class="form-container">
+          <div class="form-content">
+              <h1>Iniciar Sesión</h1>
+              <form method="POST" action="crear_sesion.php">
+                  <div class="form-group">
+                      <label for="username">Nombre de usuario</label>
+                      <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="password">Contraseña</label>
+                      <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                  </div>
+                  <?php if (!empty($error_message)): ?>
+                    <p class="error-message" style="color: red;"><?= $error_message ?></p>
+                <?php endif; ?>
+                  <button type="submit"><b>Ingresar</b></button>
+              </form>
+              <p>¿Aún no tienes una cuenta? <a href="registro.php">Regístrate</a></p>
           </div>
-          <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
-          </div>
-          <div class="form-group text-right">
-            <p><a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a></p>
-          </div>
-          <button type="submit">Ingresar</button>
-        </form>
-        <p>¿Aún no tienes una cuenta? <a href="registro.html">Regístrate</a></p>
       </div>
-    </div>  
-    <div class="logo-container-forms">
-      <img src="images/logo_coffee-p.png" alt="Logo Coffee-P" class="logo">
-    </div>
+      <div class="logo-container-forms">
+        <img src="images/logo_coffee-p.png" alt="Logo Coffee-P" class="logo">
+      </div>
   </main>
 
   <!-- Pie de página -->

@@ -18,24 +18,33 @@ include 'recetas_inicio.php';
 <!-- Encabezado -->
 <header>
     <nav>
-      <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Información</a></li>
-      </ul>
-      <div class="icons">
-      <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="perfil_admin.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php else: ?>
-          <a href="registro.html">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php endif; ?>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Infromación</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <span class="user">
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
 
@@ -45,6 +54,11 @@ include 'recetas_inicio.php';
         <!-- Contenedor de Filtros -->
         <div class="filters-container">
             <form method="GET" action="">
+                <!-- Barra de búsqueda -->
+                <div class="search-bar">
+                    <input type="text" name="search" placeholder="Buscar receta..." value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
+                    <button type="submit">Buscar</button>
+                </div>
                 <div class="filters">
                     <h3>Filtros por categoría</h3>
                     
@@ -98,21 +112,21 @@ include 'recetas_inicio.php';
                         </div>
                     </div>
 
-                    <!-- Filtro por Nombre de receta -->
+                    <!-- Filtro por Métodos -->
                     <div class="filter-group">
                         <label>
                             <input type="checkbox" onclick="toggleFilter('method-options')" />
-                            <span>Nombre de Receta</span>
+                            <span>Métodos</span>
                         </label>
                         <div id="method-options" class="filter-options">
                             <?php
-                            $metodos = $conn->query("SELECT Rec_nombre FROM receta GROUP BY Rec_nombre");
+                            $metodos = $conn->query("SELECT Rec_metodo FROM receta GROUP BY Rec_metodo");
                             while ($row = $metodos->fetch_assoc()) {
-                                $checked = isset($_GET['methods']) && in_array($row['Rec_nombre'], $_GET['methods']) ? 'checked' : '';
+                                $checked = isset($_GET['methods']) && in_array($row['Rec_metodo'], $_GET['methods']) ? 'checked' : '';
                                 echo "
                                     <label>
-                                        <input type='checkbox' name='methods[]' value='{$row['Rec_nombre']}' $checked>
-                                        <span>{$row['Rec_nombre']}</span>
+                                        <input type='checkbox' name='methods[]' value='{$row['Rec_metodo']}' $checked>
+                                        <span>{$row['Rec_metodo']}</span>
                                     </label>";
                             }
                             ?>

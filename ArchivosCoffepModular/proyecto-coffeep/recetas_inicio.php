@@ -12,6 +12,7 @@ $isRankingChecked = isset($_GET['ranking']) && $_GET['ranking'] == '1';
 $selectedIngredients = isset($_GET['ingredients']) ? $_GET['ingredients'] : [];
 $selectedGrainTypes = isset($_GET['grainTypes']) ? $_GET['grainTypes'] : [];
 $selectedMethods = isset($_GET['methods']) ? $_GET['methods'] : [];
+$search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Construir la consulta principal
 $sql = "SELECT Rec_idrec, Rec_nombre, Rec_foto, Rec_calificacion, Rec_clasificacion, Rec_nickname 
@@ -41,7 +42,14 @@ if (!empty($selectedGrainTypes)) {
 // Filtro por método
 if (!empty($selectedMethods)) {
     $methods = "'" . implode("','", $selectedMethods) . "'";
-    $where[] = "Rec_nombre IN ($methods)";
+    $where[] = "Rec_metodo IN ($methods)";
+}
+
+// Filtro por búsqueda de nombre
+if (!empty($search)) {
+    // Normaliza el texto a minúsculas para que no sea sensible a mayúsculas
+    $search = strtolower($conn->real_escape_string($search));
+    $where[] = "LOWER(Rec_nombre) LIKE '%$search%'";
 }
 
 // Añadir joins y condiciones a la consulta

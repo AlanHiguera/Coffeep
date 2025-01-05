@@ -59,7 +59,7 @@ html {
       padding: 20px;
   }  
 
-  .container {
+.container {
     display: flex;
     max-width: 1200px;
     margin: 2rem auto;
@@ -81,7 +81,6 @@ html {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
 }
-
   
 /* Estilos generales para el contenedor */
 .filters {
@@ -262,6 +261,34 @@ html {
     padding: 0.2rem 0.5rem;
     border-radius: 8px;
     display: inline-block;
+}
+
+.search-bar {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #c68c6c;
+    border-radius: 5px 0 0 5px;
+    font-size: 14px;
+    color: #252525;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #c68c6c;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-bar button:hover {
+    background-color: #a17157;
 }
 
 footer {

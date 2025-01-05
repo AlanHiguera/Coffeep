@@ -17,7 +17,7 @@
       <ul>
           <li><a href="inicio.php">Inicio</a></li>
           <li><a href="contacto.php">Contacto</a></li>
-          <li><a href="guia.php">Infromación</a></li>
+          <li><a href="guia.php">Información</a></li>
       </ul>
       <div class="icons">
           <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
@@ -74,7 +74,7 @@
             <label for="email">Correo electrónico</label>
             <input type="email" id="email" name="email" placeholder="ejemplo@gmail.com">
           </div>
-          <button type="submit">Registrarse</button>
+          <button type="submit"><b>Registrarse</b></button>
         </form>
         <p>¿Ya tienes una cuenta? <a href="iniciar_sesion.php">Iniciar Sesión</a></p>
       </div>

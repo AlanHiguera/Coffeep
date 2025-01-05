@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
       <ul>
         <li><a href="inicio.php">Inicio</a></li>
         <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Infromación</a></li>
+        <li><a href="guia.php">Información</a></li>
       </ul>
       <div class="icons">
         <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>

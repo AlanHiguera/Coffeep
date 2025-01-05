@@ -54,8 +54,11 @@ html {
       text-decoration: underline;
   }
   main {
-      flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
-      padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    padding: 20px;
   }
 
   .container {
@@ -76,7 +79,7 @@ html {
   }
 
   .sidebar img {
-    width: 45%;
+    width: 30%;
     height: auto;
     border-radius: 50%;
   }
