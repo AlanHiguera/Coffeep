@@ -15,8 +15,8 @@ include 'recetas_inicio.php';
   <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-  <!-- Encabezado -->
-  <header>
+<!-- Encabezado -->
+<header>
     <nav>
       <ul>
         <li><a href="inicio.php">Inicio</a></li>
@@ -27,7 +27,7 @@ include 'recetas_inicio.php';
         <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
         <span class="user">
         <?php if (isset($_SESSION['user'])): ?>
-          <a href="perfil_admin.php">
+          <a href="miperfil.php">
             <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
           </a>
         <?php else: ?>
@@ -41,61 +41,124 @@ include 'recetas_inicio.php';
   </header>
 
   <!-- Contenido principal -->
-  <main>
+<main>
     <div class="container">
-      <form method="GET" action="">
+        <form method="GET" action="">
         <div class="filters">
             <h3>Filtros por categoría</h3>
+
+            <!-- Filtro Ranking -->
             <div class="filter-group">
                 <label>
                     <input type="checkbox" name="ranking" value="1" <?php if (isset($_GET['ranking'])) echo 'checked'; ?>>
                     <span>Ranking</span>
                 </label>
-                <label>
-                    <input type="checkbox" name="ingredient">
-                    <span>Ingrediente</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="grain-type">
-                    <span>Variedad de grano</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="method">
-                    <span>Método</span>
-                </label>
             </div>
+
+            <!-- Filtro por Ingredientes -->
+            <div class="filter-group">
+                <label>
+                    <input type="checkbox" onclick="toggleFilter('ingredients-options')" />
+                    <span>Ingredientes</span>
+                </label>
+                <div id="ingredients-options" class="filter-options">
+                    <?php
+                    $ingredientes = $conn->query("SELECT Ing_iding, Ing_nombre FROM ingrediente");
+                    while ($row = $ingredientes->fetch_assoc()) {
+                        $checked = isset($_GET['ingredients']) && in_array($row['Ing_iding'], $_GET['ingredients']) ? 'checked' : '';
+                        echo "
+                            <label>
+                                <input type='checkbox' name='ingredients[]' value='{$row['Ing_iding']}' $checked>
+                                <span>{$row['Ing_nombre']}</span>
+                            </label>";
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <!-- Filtro por Tipos de Grano -->
+            <div class="filter-group">
+                <label>
+                    <input type="checkbox" onclick="toggleFilter('grain-options')" />
+                    <span>Tipos de Grano</span>
+                </label>
+                <div id="grain-options" class="filter-options">
+                    <?php
+                    $tiposGrano = $conn->query("SELECT Gra_idgrano, Gra_nombre FROM grano");
+                    while ($row = $tiposGrano->fetch_assoc()) {
+                        $checked = isset($_GET['grainTypes']) && in_array($row['Gra_idgrano'], $_GET['grainTypes']) ? 'checked' : '';
+                        echo "
+                            <label>
+                                <input type='checkbox' name='grainTypes[]' value='{$row['Gra_idgrano']}' $checked>
+                                <span>{$row['Gra_nombre']}</span>
+                            </label>";
+                    }
+                    ?>
+                </div>
+            </div>
+
+            <!-- Filtro por Métodos -->
+            <div class="filter-group">
+                <label>
+                    <input type="checkbox" onclick="toggleFilter('method-options')" />
+                    <span>Métodos</span>
+                </label>
+                <div id="method-options" class="filter-options">
+                    <?php
+                    $metodos = $conn->query("SELECT Rec_metodo FROM receta GROUP BY Rec_metodo");
+                    while ($row = $metodos->fetch_assoc()) {
+                        $checked = isset($_GET['methods']) && in_array($row['Rec_metodo'], $_GET['methods']) ? 'checked' : '';
+                        echo "
+                            <label>
+                                <input type='checkbox' name='methods[]' value='{$row['Rec_metodo']}' $checked>
+                                <span>{$row['Rec_metodo']}</span>
+                            </label>";
+                    }
+                    ?>
+                </div>
+            </div>
+
             <button type="submit">Aplicar filtros</button>
         </div>
-      </form>
+        </form>
+    
 
-      <!-- Recetas -->
-      <div class="recipes">
-        <?php if ($result->num_rows > 0): ?>
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <a href="recetas.php?id=<?= $row['Rec_idrec'] ?>" class="recipe-link">
-                    <div class="recipe-card">
-                        <?php
-                        $imageData = base64_encode($row['Rec_foto']);
-                        $imageSrc = 'data:image/jpeg;base64,' . $imageData;
-                        ?>
-                        <img src="<?= $imageSrc ?>" alt="<?= $row['Rec_nombre'] ?>">
-                        <h4><?= $row['Rec_nombre'] ?></h4>
-                        <p class="rating">&#11088; <?= $row['Rec_calificacion'] ?></p>
-                        <span class="tag"><?= $row['Rec_clasificacion'] ?></span>
-                        <p><?= $row['Rec_nickname'] ?></p>
-                    </div>
-                </a>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <p>No hay recetas disponibles.</p>
-        <?php endif; ?>
-        <?php $conn->close(); ?>
-      </div>   
-  </main>
+        <!-- Recetas -->
+        <div class="recipes">
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <a href="recetas.php?id=<?= $row['Rec_idrec'] ?>" class="recipe-link">
+                        <div class="recipe-card">
+                            <?php
+                            $imageData = base64_encode($row['Rec_foto']);
+                            $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+                            ?>
+                            <img src="<?= $imageSrc ?>" alt="<?= $row['Rec_nombre'] ?>">
+                            <h4 style="color: #a17157;"><?= $row['Rec_nombre'] ?></h4>
+                            <p class="rating">&#11088; <b><?= $row['Rec_calificacion'] ?></b></p>
+                            <span class="tag"><?= $row['Rec_clasificacion'] ?></span>
+                            <p style="margin-top:10px; font-size:13px;">Subido por: <b><?= $row['Rec_nickname'] ?></b></p>
+                        </div>
+                    </a>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No hay recetas disponibles.</p>
+            <?php endif; ?>
+            <?php $conn->close(); ?>
+        </div>  
+    </div>
+</main>
 
-  <!-- Pie de página -->
-  <footer>
+<script>
+    function toggleFilter(id) {
+        const options = document.getElementById(id);
+        options.classList.toggle('active');
+    }
+</script>
+
+<!-- Pie de página -->
+<footer>
     <p>Coffee-P &copy; Todos los derechos reservados.</p>
-  </footer>
+</footer>
 </body>
 </html>

@@ -19,13 +19,12 @@ if (!isset($_SESSION['user'])) {
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-    <!-- Encabezado -->
-    <header>
+<!-- Encabezado -->
+  <header>
     <nav>
       <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Información</a></li>
+        <li><a href="mantenedor_ting.php">Mantenedor</a></li>
+        <li><a href="generar_listusu.php">Listado</a></li>
       </ul>
       <div class="icons">
         <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
@@ -35,13 +34,15 @@ if (!isset($_SESSION['user'])) {
             <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
           </a>
         <?php else: ?>
-          <a href="registro.html">
+          <a href="registro.php">
             <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
           </a>
         <?php endif; ?>
       </div>
     </nav>
   </header>
+
+<main>
     <div class="container">
         <div class="sidebar">
             <h3>Gestión</h3>

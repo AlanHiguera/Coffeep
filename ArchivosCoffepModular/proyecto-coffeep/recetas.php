@@ -157,30 +157,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
   <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-    <!-- Encabezado -->
-    <header>
-        <nav>
-        <ul>
-            <li><a href="inicio.php">Inicio</a></li>
-            <li><a href="contacto.php">Contacto</a></li>
-            <li><a href="guia.php">Información</a></li>
-        </ul>
-        <div class="icons">
-            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-            <span class="user">
-            <?php if (isset($_SESSION['user'])): ?>
-            <a href="perfil_admin.php">
-                <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-            </a>
-            <?php else: ?>
-            <a href="registro.html">
-                <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-            </a>
-            <?php endif; ?>
-            </span>
-        </div>
-        </nav>
-    </header>
+<!-- Encabezado -->
+<header>
+    <nav>
+      <ul>
+        <li><a href="inicio.php">Inicio</a></li>
+        <li><a href="contacto.php">Contacto</a></li>
+        <li><a href="guia.php">Infromación</a></li>
+      </ul>
+      <div class="icons">
+        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
+        <span class="user">
+        <?php if (isset($_SESSION['user'])): ?>
+          <a href="miperfil.php">
+            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
+          </a>
+        <?php else: ?>
+          <a href="registro.html">
+            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
+          </a>
+        <?php endif; ?>
+        </span>
+      </div>
+    </nav>
+  </header>
 
 <main>
     <?php if ($mostrarMensaje): ?>
@@ -205,6 +205,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
             <?php else: ?>
                 <p>No hay ingredientes asociados a esta receta.</p>
             <?php endif; ?>
+
+        <h3>Método:</h3>
+        <p><?= $receta['Rec_metodo'] ?></p>
+
         <h3>Preparación:</h3>
         <p><?= nl2br($receta['Rec_preparacion']) ?></p><br>
         

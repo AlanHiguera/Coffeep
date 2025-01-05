@@ -20,19 +20,19 @@ if (!isset($_SESSION['user'])) {
 </head>
 <body>
 
- <!-- Encabezado -->
- <header>
+<!-- Encabezado -->
+<header>
     <nav>
       <ul>
         <li><a href="inicio.php">Inicio</a></li>
         <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Información</a></li>
+        <li><a href="guia.php">Infromación</a></li>
       </ul>
       <div class="icons">
         <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
         <span class="user">
         <?php if (isset($_SESSION['user'])): ?>
-          <a href="perfil_admin.php">
+          <a href="miperfil.php">
             <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
           </a>
         <?php else: ?>

@@ -1,61 +1,62 @@
 html {
     font-family: 'Montserrat', sans-serif;
+    height: 100%;
   }
   
 * { /* Reset */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    color: #252525;
-    background-color: #f8f4f1;
-}
-    
-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #d3b8a4;
-    padding: 30px 40px;
-}
-    
-header nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-    
-header nav ul li a {
-    text-decoration: none;
-    color: #252525;
-}
-    
-header .icons {
-    display: flex;
-    gap: 15px;
-}
-    
-header .icons span {
-    width: 26px;
-    height: 26px;
-    background-color: #cfc0b400;
-    border-radius: 50%;
-    display: inline-block;
-}
+  }
   
-nav li a:hover {
-    text-decoration: underline;
-}
-
-main {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 20px;
-    gap: 20px;
-}
+  body {
+      color: #252525;
+      background-color: #f8f4f1;
+      display: flex;
+      flex-direction: column; /* Colocar header, main, y footer en una columna */
+      min-height: 100%; 
+      height: 100%;
+  }
+  
+  header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #d3b8a4;
+      padding: 30px 40px;
+  }
+  
+  header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+  }
+  
+  header nav ul li a {
+      text-decoration: none;
+      color: #252525;
+  }
+  
+  header .icons {
+      display: flex;
+      gap: 15px;
+  }
+  
+  header .icons span {
+      width: 26px;
+      height: 26px;
+      background-color: #cfc0b400;
+      border-radius: 50%;
+      display: inline-block;
+  }
+  
+  nav li a:hover {
+      text-decoration: underline;
+  }
+  main {
+      flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+      padding: 20px;
+  }
 
 /* Detalles de la receta */
 .recipe-detail {
@@ -122,7 +123,7 @@ main {
 
 /* Sección de comentarios */
 .comments-section {
-    width: 35%;
+    width: 40%;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -156,7 +157,7 @@ main {
 .comment small {
     display: block;
     text-align: right;
-    color: #000000;
+    color: #a17157;
     font-size: 0.8rem;
 }
 
@@ -286,4 +287,4 @@ footer {
     background-color: #d3b8a4;
     padding: 20px;
     font-size: 14px;
-}
+  }

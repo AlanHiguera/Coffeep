@@ -1,58 +1,63 @@
 html {
     font-family: 'Montserrat', sans-serif;
-  }
+    height: 100%;
+}
   
 * { /* Reset */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-    
-body {
-    color: #252525;
-    background-color: #f8f4f1;
-}
-    
-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #d3b8a4;
-    padding: 30px 40px;
-}
-    
-header nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-    
-header nav ul li a {
-    text-decoration: none;
-    color: #252525;
-}
-    
-header .icons {
-    display: flex;
-    gap: 15px;
-}
-    
-header .icons span {
-    width: 26px;
-    height: 26px;
-    background-color: #cfc0b400;
-    border-radius: 50%;
-    display: inline-block;
-}
+  }
   
-nav li a:hover {
-    text-decoration: underline;
-}
-  /* Contenedor principal */
-main {
-    padding: 20px;
-    flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
-}   
+  body {
+      color: #252525;
+      background-color: #f8f4f1;
+      display: flex;
+      flex-direction: column; /* Colocar header, main, y footer en una columna */
+      min-height: 100%; 
+      height: 100%;
+  }
+  
+  header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #d3b8a4;
+      padding: 30px 40px;
+  }
+  
+  header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+  }
+  
+  header nav ul li a {
+      text-decoration: none;
+      color: #252525;
+  }
+  
+  header .icons {
+      display: flex;
+      gap: 15px;
+  }
+  
+  header .icons span {
+      width: 26px;
+      height: 26px;
+      background-color: #cfc0b400;
+      border-radius: 50%;
+      display: inline-block;
+  }
+  
+  nav li a:hover {
+      text-decoration: underline;
+  }
+
+  main {
+      flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+      padding: 20px;
+  }  
 
 .container {
     display: flex;
@@ -68,7 +73,7 @@ main {
     padding: 20px;
     height: 100%;
     border-radius: 10px;
-    width: 250px;
+    width: 280px;
 }
 
 .filters h3 {
@@ -98,31 +103,45 @@ main {
 /* Checkbox */
 .filter-group input[type="checkbox"] {
     appearance: none;
-    width: 15px;
-    height: 15px;
-    border: 2px solid #c68c6c; /* Borde marrón claro */
-    border-radius: 50%; /* Forma circular */
-    background-color: #c68c6c; /* Fondo igual que el contenedor */
+    -webkit-appearance: none; /* Compatibilidad con Safari */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #c68c6c; /* Borde inicial */
+    border-radius: 4px; /* Forma cuadrada con bordes redondeados */
+    background-color: #fff; /* Fondo blanco inicial */
     cursor: pointer;
-    transition: all 1ms ease-in-out;
+    display: inline-block;
+    position: relative;
 }
 
 /* Checkbox seleccionado */
 .filter-group input[type="checkbox"]:checked {
-    background-color: #c68c6c; /* Color marrón claro */
-    border-color: #252525; /* Borde marrón oscuro */
+    background-color: #c68c6c; /* Fondo marrón claro al seleccionarlo */
+    border-color: #252525; /* Cambia el borde al seleccionarse */
+}
+
+.filter-group input[type="checkbox"]:checked::after {
+    content: "✔"; /* Símbolo personalizado */
+    font-size: 16px;
+    color: rgb(0, 0, 0); /* Color del símbolo ✔ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Texto del filtro */
 .filter-group span {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: normal;
+    margin: 5px;
 }
 
 /* Hover */
-.filter-group label:hover span {
+.filter-group span:hover {
     font-weight: bold;
-    color: #252525; /* Marrón intermedio */
+    color: #252525;
+    cursor: pointer;
 }
 
 .filters button:hover {
@@ -138,6 +157,28 @@ main {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
+}
+
+/* Contenedor de las opciones desplegables */
+.filter-options {
+    display: none; /* Ocultas por defecto */
+    margin-left: 10px;
+    margin-top: 10px;
+    border-left: 2px solid #c68c6c;
+    padding-left: 10px;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.filter-options label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Opciones activas */
+.filter-options.active {
+    display: flex; /* Mostrar cuando sea activo */
 }
 
 .recipe-link {
@@ -171,6 +212,7 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
+    height: 330px;
     padding: 15px;
     transition: transform 0.3s ease;
   }
@@ -187,13 +229,13 @@ main {
   }
   
   .recipe-card h4 {
-    font-size: 16px;
+    font-size: 18px;
     margin: 10px 0;
   }
   
   .recipe-card .rating {
     margin: 0.5rem 0;
-    color: #ffa500;
+    color: #ffd000;
 }
   
 .recipe-card .tag {
@@ -206,8 +248,8 @@ main {
 }
 
 footer {
-  text-align: center;
-  background-color: #d3b8a4;
-  padding: 20px;
-  font-size: 14px;
-}
+    text-align: center;
+    background-color: #d3b8a4;
+    padding: 20px;
+    font-size: 14px;
+  }
