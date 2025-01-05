@@ -47,30 +47,40 @@ if (!isset($_SESSION['user'])) {
     <div class="table-container">
       <h2>Lista de Usuarios</h2>
       <table>
-        <thead>
-          <tr>
-            <th>ID</th>
+    <thead>
+        <tr>
+            <th>Foto</th>
+            <th>Nickname</th>
             <th>Correo</th>
-            <th>nombre</th>
+            <th>Nombre</th>
             <th>Apellido</th>
             <th>Rol</th>
             <th>Editar</th>
             <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-            // Conexión a la base de datos
-            include "conexion.php";
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Conexión a la base de datos
+        include "conexion.php";
 
-            // Consulta para obtener los usuarios
-            $sql_check = "SELECT Usu_nickname, Usu_correo , Usu_nombre, Usu_apellido, Usu_rol FROM usuario";
-            $result = $conn->query($sql_check);
+        // Consulta para obtener los usuarios
+        $sql_check = "SELECT * FROM usuario";
+        $result = $conn->query($sql_check);
 
-            if ($result->num_rows > 0) {
-                // Imprimir filas de la tabla
-                while ($row = $result->fetch_assoc()) {
+        if ($result->num_rows > 0) {
+            // Imprimir filas de la tabla
+            while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                
+                // Codificar la imagen en base64
+                $imageData = base64_encode($row['Usu_foto']);
+                $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+                
+                // Mostrar la imagen
+                echo "<td> <img src='" . $imageSrc . "' alt='' style='width: 50px;height:50px;' /> </td>";
+                
+                // Mostrar los datos del usuario
                 echo "<td>" . $row['Usu_nickname'] . "</td>";
                 echo "<td>" . $row['Usu_correo'] . "</td>";
                 echo "<td>" . $row['Usu_nombre'] . "</td>";
@@ -79,15 +89,15 @@ if (!isset($_SESSION['user'])) {
                 echo "<td><a class='edit' href='#" . $row['Usu_nickname'] . "'>Editar</a></td>";
                 echo "<td><a class='delete' href='#" . $row['Usu_nickname'] . "'>Eliminar</a></td>";
                 echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6'>No hay usuarios registrados</td></tr>";
             }
+        } else {
+            echo "<tr><td colspan='8'>No hay usuarios registrados</td></tr>";
+        }
 
-            $conn->close();
-          ?>
-        </tbody>
-      </table>
+        $conn->close();
+        ?>
+    </tbody>
+</table>
     </div>
   </div>
 
