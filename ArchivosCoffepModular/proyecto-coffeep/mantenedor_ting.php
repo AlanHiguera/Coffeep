@@ -27,15 +27,15 @@ if (!isset($_SESSION['user'])) {
         <li><a href="generar_listusu.php">Listado</a></li>
       </ul>
       <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
+        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
         <span class="user">
         <?php if (isset($_SESSION['user'])): ?>
           <a href="perfil_admin.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
+            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;">
           </a>
         <?php else: ?>
           <a href="registro.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
+            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;">
           </a>
         <?php endif; ?>
       </div>
@@ -103,7 +103,7 @@ if (!isset($_SESSION['user'])) {
                     <p id="edit-mensaje" style="margin-top: 10px; font-weight: bold;"></p>
                 </div>
                 
-                <!-- Formulario para agregar (sin cambios) -->
+                <!-- Formulario para agregar -->
                 <div id="formulario">
                     <form name="nombre" method="POST" action="agregar_ting.php" onsubmit="return procesarFormulario(event);">
                         <label for="nombre">Nombre del ingrediente:</label>
@@ -112,92 +112,6 @@ if (!isset($_SESSION['user'])) {
                     </form>
                     <p id="mensaje" style="margin-top: 10px; font-weight: bold;"></p>
                 </div>
-                
-                <script>
-                    // Función para mostrar el formulario de edición
-                    function mostrarFormulario(id) {
-                        const form = document.getElementById('edit-form');
-                        const idInput = document.getElementById('edit-id');
-                        const nombreInput = document.getElementById('edit-nombre');
-                        const currentName = document.getElementById(`name-${id}`).textContent;
-                
-                        idInput.value = id;
-                        nombreInput.value = currentName;
-                        form.style.display = 'block';
-                    }
-                
-                    // Función para ocultar el formulario
-                    function ocultarFormulario() {
-                        document.getElementById('edit-form').style.display = 'none';
-                    }
-                
-                    // Función para procesar la edición
-                    function procesarEdicion(event) {
-                        event.preventDefault();
-                
-                        const formData = new FormData(event.target);
-                        const mensaje = document.getElementById('edit-mensaje');
-                        const id = formData.get('id');
-                        const nuevoNombre = formData.get('nombre');
-                
-                        fetch('editar_ting.php', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            if (data.includes("Exitoso")) {
-                                mensaje.textContent = "Nombre actualizado con éxito.";
-                                mensaje.style.color = "green";
-                                document.getElementById(`name-${id}`).textContent = nuevoNombre;
-                                setTimeout(() => ocultarFormulario(), 2000);
-                            } else {
-                                mensaje.textContent = "Error al actualizar: " + data;
-                                mensaje.style.color = "red";
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            mensaje.textContent = "Hubo un error al procesar la solicitud.";
-                            mensaje.style.color = "red";
-                        });
-                    }
-                
-                    // Función para procesar el agregar (sin cambios)
-                    function procesarFormulario(event) {
-                        event.preventDefault(); // Evitar el envío tradicional del formulario
-                
-                        const form = event.target;
-                        const formData = new FormData(form);
-                        const mensaje = document.getElementById('mensaje');
-                
-                        fetch('agregar_ting.php', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.text()) // Leer la respuesta del servidor como texto
-                        .then(data => {
-                            mensaje.textContent = data; // Mostrar la respuesta en el mensaje
-                            if (data.includes("Registro guardado correctamente")) {
-                                mensaje.style.color = "green";
-                
-                                // Recargar la página después de 2 segundos
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 2000);
-                            } else {
-                                mensaje.style.color = "red";
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            mensaje.textContent = "Hubo un error al procesar el formulario.";
-                            mensaje.style.color = "red";
-                        });
-                
-                        return false; // Prevenir el envío normal del formulario
-                    }
-                </script>
             </div>
         </div>
     </div>
@@ -205,6 +119,9 @@ if (!isset($_SESSION['user'])) {
 <!-- Pie de página -->
 <footer>
     <p>Coffee-P &copy; Todos los derechos reservados.</p>
-  </footer>
+</footer>
+
+<!-- Enlace al archivo externo de JavaScript -->
+<script src="scripts.js"></script>
 </body>
 </html>
