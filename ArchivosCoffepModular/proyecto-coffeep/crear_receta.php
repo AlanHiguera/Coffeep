@@ -1,10 +1,11 @@
 <?php
-include 'conexion.php'; // Archivo para conectar a la base de datos
-session_start(); // Iniciar sesión
+session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: iniciar_sesion.php");
     exit();
 }
+
+include 'conexion.php'; // Archivo para conectar a la base de datos
 ?>
 
 <!DOCTYPE html>
@@ -27,19 +28,14 @@ if (!isset($_SESSION['user'])) {
                 <li><a href="inicio.php">Inicio</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
                 <li><a href="guia.php">Información</a></li>
-                </ul>
+            </ul>
             <div class="icons">
-            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
+                <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
                 <span class="user">
-                <?php if (isset($_SESSION['user'])): ?>
-                <a href="perfil_admin.php">
-                    <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-                </a>
-                <?php else: ?>
-                <a href="registro.html">
-                    <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-                </a>
-                <?php endif; ?>
+                    <a href="perfil_admin.html">
+                        <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;">
+                    </a>
+                </span>
             </div>
         </nav>
     </header>
@@ -50,7 +46,7 @@ if (!isset($_SESSION['user'])) {
             <div class="form-content">
                 <h1>Crear Receta</h1>
                 <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-                    <p class="success-message">Receta creada exitosamente.</p>
+                    <p class="success-message">Receta guardada exitosamente.</p>
                 <?php endif; ?>
 
                 <form action="publicar_receta.php" method="POST" enctype="multipart/form-data">
@@ -99,8 +95,8 @@ if (!isset($_SESSION['user'])) {
 
                     <!-- Restricción de edad -->
                     <div class="form-group age-restriction">
-                        <input type="checkbox" id="rec_clasificacion" name="rec_clasificacion" value="+18"> 
-                        <label for="rec_clasificacion">Restricción de edad</label>
+                        <input type="checkbox" id="age_restriction" name="age_restriction">
+                        <label for="age_restriction">Restricción de edad</label>
                     </div>
                     <button type="submit" class="btn-primary">Publicar Receta</button>
                 </form>
@@ -118,6 +114,7 @@ if (!isset($_SESSION['user'])) {
                     *Ante cualquier imagen que incumpla las normas, corres el riesgo de perder tu cuenta.
                 </p>
             </div>
+
         </div>
     </main>
 

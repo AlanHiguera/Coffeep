@@ -5,7 +5,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 include 'conexion.php';
-include 'subir_foto.php';
+include 'subir_foto.php'; // Incluir el archivo con la función subirFoto
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre_Receta = $_POST['rec_nombre'] ?? null;
@@ -14,32 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metodo = $_POST['rec_metodo'] ?? null;
     $fecha_pub = date('Y-m-d');
     $age_restriction = isset($_POST['rec_clasificacion']) && $_POST['rec_clasificacion'] == '+18' ? '+18' : 'ATP';
-    $nickname = $_SESSION['nickname'] ?? null;
+    $nickname = $_SESSION['user'] ?? null;
     $calificacion = 0.0;
-
-    // Manejar la subida de la foto
-    $fileTmpPath = null;
-    $fileName = null;
-    $fileSize = null;
-    $fileType = null;
-    $fileExtension = null;
-    $foto = null;
-
-    if (isset($_FILES['rec_foto']) && $_FILES['rec_foto']['error'] == UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['rec_foto']['tmp_name'];
-        $fileName = $_FILES['rec_foto']['name'];
-        $fileSize = $_FILES['rec_foto']['size'];
-        $fileType = $_FILES['rec_foto']['type'];
-        $fileNameCmps = explode(".", $fileName);
-        $fileExtension = strtolower(end($fileNameCmps));
-
-        $allowedfileExtensions = array('jpg', 'jpeg', 'png', 'gif');
-        if (!in_array($fileExtension, $allowedfileExtensions)) {
-            die("Error: Solo se permiten archivos JPG, JPEG, PNG y GIF.");
-        }
-
-        $foto = file_get_contents($fileTmpPath);
-    }
 
     // Verificar que los campos obligatorios no estén vacíos
     if (!$nombre_Receta || !$preparacion || !$grano_id || !$metodo || !$nickname) {
@@ -49,25 +25,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "metodo: " . var_export($metodo, true) . "<br>";
         echo "nickname: " . var_export($nickname, true) . "<br>";
         echo "calificacion: " . var_export($calificacion, true) . "<br>";
-        echo "fileTmpPath: " . var_export($fileTmpPath, true) . "<br>";
-        echo "fileName: " . var_export($fileName, true) . "<br>";
-        echo "fileSize: " . var_export($fileSize, true) . "<br>";
-        echo "fileType: " . var_export($fileType, true) . "<br>";
-        echo "fileExtension: " . var_export($fileExtension, true) . "<br>";
-        echo "foto (contenido): " . var_export(substr($foto, 0, 100), true) . "...<br>"; // Mostrar solo los primeros 100 caracteres del contenido de la foto
         die("Error: Todos los campos son obligatorios.");
     }
 
     // Insertar Receta
-    $sql = "INSERT INTO receta (Rec_nombre, Rec_preparacion, Rec_idgrano, Rec_metodo, Rec_foto, Rec_fecha_pub, Rec_clasificacion, Rec_nickname, Rec_calificacion) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO receta (Rec_nombre, Rec_preparacion, Rec_idgrano, Rec_metodo, Rec_fecha_pub, Rec_clasificacion, Rec_nickname, Rec_calificacion) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssisssssd", $nombre_Receta, $preparacion, $grano_id, $metodo, $foto, $fecha_pub, $age_restriction, $nickname, $calificacion);
+    $stmt->bind_param("ssissssd", $nombre_Receta, $preparacion, $grano_id, $metodo, $fecha_pub, $age_restriction, $nickname, $calificacion);
 
     if ($stmt->execute()) {
         $Receta_id = $stmt->insert_id;
 
-        // Variables para la información nutricional total
+        // Manejar la subida de la foto
+        if (isset($_FILES['rec_foto']) && $_FILES['rec_foto']['error'] == UPLOAD_ERR_OK) {
+            if (!subirFoto($_FILES['rec_foto'], $conn, $Receta_id)) {
+                die("Error: No se pudo subir la foto.");
+            }
+        }
+
+        // Insertar ingredientes con cantidades y calcular información nutricional
         $total_grasas = 0;
         $total_proteinas = 0;
         $total_hidratos = 0;
@@ -75,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $total_sodio = 0;
         $total_colesterol = 0;
 
-        // Insertar ingredientes con cantidades y calcular información nutricional
         foreach ($_POST['ingredientes'] as $index => $ingrediente_id) {
             $cantidad = $_POST['cantidades'][$index];
             $sql_ingrediente = "INSERT INTO cantidad_ingrediente (Can_idrec, Can_iding, Can_cantidad) VALUES (?, ?, ?)";
@@ -106,6 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("ddddddi", $total_grasas, $total_proteinas, $total_hidratos, $total_azucares, $total_sodio, $total_colesterol, $Receta_id);
         $stmt_update->execute();
+
+        // Redirigir con éxito
+        header("Location: crear_receta.php?success=1");
+        exit();
+    } else {
+        die("Error: No se pudo guardar la receta.");
     }
 }
 ?>

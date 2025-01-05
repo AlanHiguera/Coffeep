@@ -7,7 +7,7 @@ function subirFoto($archivo, $conexion, $recetaId) {
         // Preparar la consulta para insertar la imagen en la base de datos
         $query = "UPDATE receta SET Rec_foto = ? WHERE Rec_idrec = ?";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("bi", $contenidoFoto, $recetaId);
+        $stmt->bind_param("si", $contenidoFoto, $recetaId);
         
         // Ejecutar la consulta
         if ($stmt->execute()) {
