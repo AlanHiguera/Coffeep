@@ -78,7 +78,7 @@ if ($result->num_rows > 0) {
         <h3><?php echo $_SESSION['user']; ?></h3>
         <p><?php echo $firstname; ?> <?php echo $lastname; ?> | <?php echo $age; ?> años</p>
         <p><?php echo $email; ?></p>
-        <a href="#">Editar perfil</a>
+        <a href="generar_listusu.php">Editar perfil</a>
       </div>
   
       <!-- Gestión de Tablas -->
