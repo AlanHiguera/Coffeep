@@ -105,6 +105,10 @@ main {
   text-align: center;
   }
 
+  .accordion-container li {
+    margin-left: 20px;
+  }
+
   footer {
     text-align: center;
     background-color: #d3b8a4;

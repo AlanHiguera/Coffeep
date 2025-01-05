@@ -94,6 +94,32 @@ main {
     line-height: 1.5;
 }
 
+.containerRecetas {
+    display: flex;
+}
+
+.rating-form {
+    text-align: center;
+}
+
+.rating-form button {
+    padding: 0.8rem 1.5rem;
+    background-color: #c68c6c;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    align-self: flex-end;
+    transition: background-color 0.3s;
+}
+
+.rating-form button:hover {
+    background-color: #a17157;
+}
+
 /* Sección de comentarios */
 .comments-section {
     width: 35%;
@@ -130,7 +156,7 @@ main {
 .comment small {
     display: block;
     text-align: right;
-    color: #61544e;
+    color: #000000;
     font-size: 0.8rem;
 }
 
@@ -183,20 +209,20 @@ main {
 }
 
 
-    .replies {
-        margin-top: 0.5rem;
-        margin-left: 1rem;
-        border-left: 2px solid #c68c6c;
-        padding-left: 0.5rem;
-    }
+.replies {
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    border-left: 2px solid #c68c6c;
+    padding-left: 0.5rem;
+}
 
-    .reply {
-        background-color: #f8f4f1;
-        border-radius: 5px;
-        padding: 0.6rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        margin-bottom: 0.5rem;
-    }
+.reply {
+    background-color: #f8f4f1;
+    border-radius: 5px;
+    padding: 0.6rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.5rem;
+}
 
     
 .reply-form button {
@@ -216,17 +242,43 @@ main {
     background-color: #a17157;
 }
 
+.show-replies-btn {
+    background: none;           /* Elimina el fondo del botón */
+    border: none;               /* Elimina el borde del botón */
+    color: #000000;                /* Color del texto */
+    text-decoration: underline; /* Subraya el texto */
+    cursor: pointer;           /* Cambia el cursor al pasar sobre el texto */
+    font-size: 13px;            /* Ajusta el tamaño de la fuente si lo deseas */
+}
+
 form button[name="eliminar_comentario"] {
-    background-color: #ff4d4d;
+    background-color: #cf3939;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 form button[name="eliminar_comentario"]:hover {
-    background-color: #e60000;
+    background-color: #a32c2c;
+}
+
+#mensaje-calificacion {
+    position: fixed; /* Fija el mensaje en la pantalla */
+    top: 10px; /* Espaciado desde la parte superior */
+    left: 50%; /* Posiciona horizontalmente al 50% */
+    transform: translateX(-50%); /* Centra horizontalmente */
+    padding: 15px;
+    background-color: #f8e8d8;
+    border: 2px solid #d6b8a9;
+    border-radius: 10px;
+    color: #a17157;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Para que quede encima */
 }
 
 footer {

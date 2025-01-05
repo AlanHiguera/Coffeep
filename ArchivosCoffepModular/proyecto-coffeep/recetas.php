@@ -103,6 +103,44 @@ if (isset($_GET['id'])) {
     echo "ID de receta no especificado.";
     exit;
 }
+
+
+// Variable para mostrar el mensaje
+$mostrarMensaje = false;
+
+// Manejar el envío de la calificación
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
+    $calificacion = floatval($_POST['calificacion']);
+    $usuario = $_SESSION['user']; // Suponiendo que el usuario está autenticado y su nickname está en la sesión
+    $idReceta = $id;
+
+    // Verificar si el usuario ya calificó esta receta
+    $sqlVerificar = "SELECT * FROM evaluacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
+    $resultadoVerificar = $conn->query($sqlVerificar);
+
+    if ($resultadoVerificar->num_rows > 0) {
+        // Actualizar calificación existente
+        $sqlActualizar = "UPDATE evaluacion SET Eva_calificacion = $calificacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
+        $conn->query($sqlActualizar);
+    } else {
+        // Insertar nueva calificación
+        $sqlInsertar = "INSERT INTO evaluacion (Eva_nickname, Eva_idrec, Eva_calificacion, Eva_fecha) VALUES ('$usuario', $idReceta, $calificacion, NOW())";
+        $conn->query($sqlInsertar);
+    }
+
+    // Actualizar calificación promedio de la receta
+    $sqlPromedio = "SELECT AVG(Eva_calificacion) AS promedio FROM evaluacion WHERE Eva_idrec = $idReceta";
+    $resultadoPromedio = $conn->query($sqlPromedio);
+    if ($resultadoPromedio && $rowPromedio = $resultadoPromedio->fetch_assoc()) {
+        $calificacionPromedio = $rowPromedio['promedio'];
+        $sqlActualizarReceta = "UPDATE receta SET Rec_calificacion = $calificacionPromedio WHERE Rec_idrec = $idReceta";
+        $conn->query($sqlActualizarReceta);
+    }
+
+    // Activar el mensaje
+    $mostrarMensaje = true;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -115,6 +153,7 @@ if (isset($_GET['id'])) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="recetas.css">
+  <link rel="stylesheet" href="calificar.css">
   <link rel="icon" href="images/favicon.png">
 </head>
 <body>
@@ -144,12 +183,19 @@ if (isset($_GET['id'])) {
     </header>
 
 <main>
+    <?php if ($mostrarMensaje): ?>
+            <div id="mensaje-calificacion">
+                ¡Gracias por tu calificación! ☕✨
+            </div>
+        <?php endif; ?>
     <div class="recipe-detail">
         <img src="data:image/jpeg;base64,<?= base64_encode($receta['Rec_foto']) ?>" alt="<?= $receta['Rec_nombre'] ?>">
         <h1><?= $receta['Rec_nombre']?> </h1>
         <p><b>Clasificación:</b> <?= $receta['Rec_clasificacion']?></p>
         <p><b>Autor/a:</b> <?= $receta['Rec_nickname'] ?></p>
         <p><b>Fecha de publicación:</b> <?= $receta['Rec_fecha_pub'] ?></p>
+        <p><b>Calificación: &#11088; </b> <?= $receta['Rec_calificacion'] ?></p>
+        
         <h3>Ingredientes:</h3>
         <ul>
             <?php if (!empty($ingredientes)): ?>
@@ -161,7 +207,28 @@ if (isset($_GET['id'])) {
             <?php endif; ?>
         <h3>Preparación:</h3>
         <p><?= nl2br($receta['Rec_preparacion']) ?></p><br>
-        <p><b>Calificación: &#11088; </b> <?= $receta['Rec_calificacion'] ?></p>
+        
+        <!-- Formulario de calificación -->
+        <form method="POST" class="rating-form">
+            <label for="calificacion">Califica esta receta:</label>
+            <div class="stars">
+                <input type="radio" id="star5" name="calificacion" value="5" />
+                <label for="star5" class="starelement"></label>
+
+                <input type="radio" id="star4" name="calificacion" value="4" />
+                <label for="star4" class="starelement"></label>
+
+                <input type="radio" id="star3" name="calificacion" value="3" />
+                <label for="star3" class="starelement"></label>
+
+                <input type="radio" id="star2" name="calificacion" value="2" />
+                <label for="star2" class="starelement"></label>
+
+                <input type="radio" id="star1" name="calificacion" value="1" />
+                <label for="star1" class="starelement"></label>
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
     </div>
 
    <!-- Sección de comentarios -->
@@ -218,6 +285,19 @@ if (isset($_GET['id'])) {
         <button type="submit">Enviar</button>
     </form>
 </div>
+
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mensaje = document.getElementById('mensaje-calificacion');
+            if (mensaje) {
+                setTimeout(() => {
+                    mensaje.style.transition = "opacity 0.5s ease";
+                    mensaje.style.opacity = "0"; // Desvanecer
+                    setTimeout(() => mensaje.remove(), 500); // Eliminar después de 0.5 segundos
+                }, 2000); // Esperar 3 segundos
+            }
+        });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
