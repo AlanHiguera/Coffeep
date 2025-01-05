@@ -112,3 +112,10 @@ footer {
   padding: 20px;
   font-size: 14px;
 }
+.edit-form input[type="file"] {
+  margin-top: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 90%;
+}
