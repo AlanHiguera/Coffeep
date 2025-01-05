@@ -128,7 +128,7 @@ if (!isset($_SESSION['user'])) {
     
                 echo "<div class='form-group' style='width: 100%;'>";
                 echo "<label for='foto' style='font-weight: bold;'>Actualizar foto:</label>";
-                echo "<input type='file' id='foto' name='foto' accept='image/*' required style='padding: 5px;'>";
+                echo "<input type='file' id='foto' name='foto' accept='image/*' style='padding: 5px;'>";
                 echo "</div>";
     
                 // Botón estilizado
