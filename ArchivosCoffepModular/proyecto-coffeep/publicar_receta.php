@@ -1,66 +1,111 @@
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
-    header("Location: iniciar_sesion.php"); // Redirige al inicio de sesión si no está autenticado
+    header("Location: iniciar_sesion.php");
     exit();
 }
+include 'conexion.php';
+include 'subir_foto.php';
 
-include 'conexion.php'; // Archivo para conectar a la base de datos
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nombre_Receta = $_POST['rec_nombre'] ?? null;
+    $preparacion = $_POST['rec_preparacion'] ?? null;
+    $grano_id = $_POST['rec_grano'] ?? null;
+    $metodo = $_POST['rec_metodo'] ?? null;
+    $fecha_pub = date('Y-m-d');
+    $age_restriction = isset($_POST['rec_clasificacion']) && $_POST['rec_clasificacion'] == '+18' ? '+18' : 'ATP';
+    $nickname = $_SESSION['nickname'] ?? null;
+    $calificacion = 0.0;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener los datos del formulario
-    $nombre_receta = $_POST['Rec_nombre'];
-    $preparacion = $_POST['rec_preparacion'];
-    $grano_id = $_POST['rec_grano'];
-    $metodo = $_POST['rec_metodo'];
-    $age_restriction = isset($_POST['age_restriction']) ? '+18' : 'APT';
-    $fecha_pub = date('Y-m-d'); // Fecha de publicación actual
-    $nickname = $_SESSION['user']; // Usuario autenticado
-
-    // Verificar que el usuario exista
-    $sql_user = "SELECT Usu_nickname FROM usuario WHERE Usu_nickname = '$nickname'";
-    $result_user = mysqli_query($conn, $sql_user);
-
-    if (mysqli_num_rows($result_user) == 0) {
-        echo "Error: El usuario no existe.";
-        exit();
-    }
-
-    // Subir imagen
+    // Manejar la subida de la foto
+    $fileTmpPath = null;
+    $fileName = null;
+    $fileSize = null;
+    $fileType = null;
+    $fileExtension = null;
     $foto = null;
+
     if (isset($_FILES['rec_foto']) && $_FILES['rec_foto']['error'] == UPLOAD_ERR_OK) {
-        $file_info = getimagesize($_FILES['rec_foto']['tmp_name']);
-        if ($file_info) {
-            $foto = addslashes(file_get_contents($_FILES['rec_foto']['tmp_name']));
-        } else {
-            echo "Error: El archivo subido no es una imagen válida.";
-            exit();
-        }
-    }
+        $fileTmpPath = $_FILES['rec_foto']['tmp_name'];
+        $fileName = $_FILES['rec_foto']['name'];
+        $fileSize = $_FILES['rec_foto']['size'];
+        $fileType = $_FILES['rec_foto']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
 
-    // Insertar los datos en la base de datos
-    $sql = "INSERT INTO receta (Rec_nombre, Rec_preparacion, Rec_idgrano, Rec_metodo, Rec_foto, Rec_fecha_pub, Rec_clasificacion, Rec_calificacion, Rec_grasas, Rec_proteinas, Rec_hidratos, Rec_azucares, Rec_sodio, Rec_colesterol, Rec_nickname)
-            VALUES ('$nombre_receta', '$preparacion', $grano_id, '$metodo', '$foto', '$fecha_pub', '$age_restriction', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$nickname')";
-
-    if (mysqli_query($conn, $sql)) {
-        // Obtener el ID de la receta recién insertada
-        $receta_id = mysqli_insert_id($conn);
-
-        // Insertar los ingredientes si están definidos
-        if (isset($_POST['ingredientes']) && is_array($_POST['ingredientes'])) {
-            foreach ($_POST['ingredientes'] as $ingrediente_id) {
-                $sql_ingrediente = "INSERT INTO cantidad_ingrediente (Can_idrec, Can_iding) VALUES ($receta_id, $ingrediente_id)";
-                mysqli_query($conn, $sql_ingrediente);
-            }
+        $allowedfileExtensions = array('jpg', 'jpeg', 'png', 'gif');
+        if (!in_array($fileExtension, $allowedfileExtensions)) {
+            die("Error: Solo se permiten archivos JPG, JPEG, PNG y GIF.");
         }
 
-        // Redirigir a una página de confirmación
-        header("Location: crear_receta.php?success=1");
-        exit();
-    } else {
-        echo "Error al guardar la receta: " . mysqli_error($conn);
+        $foto = file_get_contents($fileTmpPath);
     }
 
-    mysqli_close($conn);
+    // Verificar que los campos obligatorios no estén vacíos
+    if (!$nombre_Receta || !$preparacion || !$grano_id || !$metodo || !$nickname) {
+        echo "nombre_Receta: " . var_export($nombre_Receta, true) . "<br>";
+        echo "preparacion: " . var_export($preparacion, true) . "<br>";
+        echo "grano_id: " . var_export($grano_id, true) . "<br>";
+        echo "metodo: " . var_export($metodo, true) . "<br>";
+        echo "nickname: " . var_export($nickname, true) . "<br>";
+        echo "calificacion: " . var_export($calificacion, true) . "<br>";
+        echo "fileTmpPath: " . var_export($fileTmpPath, true) . "<br>";
+        echo "fileName: " . var_export($fileName, true) . "<br>";
+        echo "fileSize: " . var_export($fileSize, true) . "<br>";
+        echo "fileType: " . var_export($fileType, true) . "<br>";
+        echo "fileExtension: " . var_export($fileExtension, true) . "<br>";
+        echo "foto (contenido): " . var_export(substr($foto, 0, 100), true) . "...<br>"; // Mostrar solo los primeros 100 caracteres del contenido de la foto
+        die("Error: Todos los campos son obligatorios.");
+    }
+
+    // Insertar Receta
+    $sql = "INSERT INTO receta (Rec_nombre, Rec_preparacion, Rec_idgrano, Rec_metodo, Rec_foto, Rec_fecha_pub, Rec_clasificacion, Rec_nickname, Rec_calificacion) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssisssssd", $nombre_Receta, $preparacion, $grano_id, $metodo, $foto, $fecha_pub, $age_restriction, $nickname, $calificacion);
+
+    if ($stmt->execute()) {
+        $Receta_id = $stmt->insert_id;
+
+        // Variables para la información nutricional total
+        $total_grasas = 0;
+        $total_proteinas = 0;
+        $total_hidratos = 0;
+        $total_azucares = 0;
+        $total_sodio = 0;
+        $total_colesterol = 0;
+
+        // Insertar ingredientes con cantidades y calcular información nutricional
+        foreach ($_POST['ingredientes'] as $index => $ingrediente_id) {
+            $cantidad = $_POST['cantidades'][$index];
+            $sql_ingrediente = "INSERT INTO cantidad_ingrediente (Can_idrec, Can_iding, Can_cantidad) VALUES (?, ?, ?)";
+            $stmt_ingrediente = $conn->prepare($sql_ingrediente);
+            $stmt_ingrediente->bind_param("iid", $Receta_id, $ingrediente_id, $cantidad);
+            $stmt_ingrediente->execute();
+
+            // Obtener información nutricional del ingrediente
+            $sql_nutricional = "SELECT Inf_grasas, Inf_proteinas, Inf_hidratos, Inf_azucares, Inf_sodio, Inf_colesterol FROM info_nutricional WHERE Inf_iding = ?";
+            $stmt_nutricional = $conn->prepare($sql_nutricional);
+            $stmt_nutricional->bind_param("i", $ingrediente_id);
+            $stmt_nutricional->execute();
+            $stmt_nutricional->bind_result($grasas, $proteinas, $hidratos, $azucares, $sodio, $colesterol);
+            $stmt_nutricional->fetch();
+            $stmt_nutricional->close();
+
+            // Calcular la información nutricional total
+            $total_grasas += ($grasas * $cantidad) / 100;
+            $total_proteinas += ($proteinas * $cantidad) / 100;
+            $total_hidratos += ($hidratos * $cantidad) / 100;
+            $total_azucares += ($azucares * $cantidad) / 100;
+            $total_sodio += ($sodio * $cantidad) / 100;
+            $total_colesterol += ($colesterol * $cantidad) / 100;
+        }
+
+        // Actualizar la receta con la información nutricional total
+        $sql_update = "UPDATE receta SET Rec_grasas = ?, Rec_proteinas = ?, Rec_hidratos = ?, Rec_azucares = ?, Rec_sodio = ?, Rec_colesterol = ? WHERE Rec_idrec = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("ddddddi", $total_grasas, $total_proteinas, $total_hidratos, $total_azucares, $total_sodio, $total_colesterol, $Receta_id);
+        $stmt_update->execute();
+    }
 }
 ?>
