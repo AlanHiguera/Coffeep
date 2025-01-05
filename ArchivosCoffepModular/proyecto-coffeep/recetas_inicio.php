@@ -41,7 +41,7 @@ if (!empty($selectedGrainTypes)) {
 // Filtro por método
 if (!empty($selectedMethods)) {
     $methods = "'" . implode("','", $selectedMethods) . "'";
-    $where[] = "Rec_metodo IN ($methods)";
+    $where[] = "Rec_nombre IN ($methods)";
 }
 
 // Añadir joins y condiciones a la consulta
