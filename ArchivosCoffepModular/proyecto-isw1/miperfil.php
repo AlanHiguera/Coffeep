@@ -73,7 +73,7 @@ if ($result->num_rows > 0) {
         <h3><?php echo $_SESSION['user']; ?></h3>
         <p><?php echo $firstname; ?> <?php echo $lastname; ?> | <?php echo $age; ?></p>
         <p><?php echo $email; ?></p>
-        <a href="#">Editar perfil</a>
+        <a href="editar_perfil.php">Editar perfil</a>
       </div>
   
       <!-- Opciones de Usuario -->

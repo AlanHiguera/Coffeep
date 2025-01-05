@@ -1,4 +1,7 @@
 <?php
+// Iniciar sesión
+session_start();
+
 // Conexión a la base de datos
 include "conexion.php";
 
@@ -21,9 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($conn->query($sql_update)) {
         // Redirigir con un mensaje de éxito
-        header("Location: gestion_cuentas.php?msg=Datos actualizados correctamente.");
+        if (isset($_SESSION['user'])) {
+            // Verificar el rol y ajustar el enlace
+            if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador') {
+                header("Location: gestion_cuentas.php");
+            } else {
+                header("Location: editar_perfil.php");
+            }
+        }
+        exit(); // Asegurar que el script termina después de redirigir
     } else {
-        echo "Error al actualizar los datos.";
+        echo "Error al actualizar los datos: " . $conn->error;
     }
 }
 

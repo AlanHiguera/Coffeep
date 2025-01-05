@@ -2,33 +2,36 @@
 include 'recetas_inicio.php'; 
 include 'conexion.php'; // Conexión a la base de datos
 
-// Obtener datos para los filtros
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['user'])) {
+    header("Location: iniciar_sesion.php"); // Redirige al inicio de sesión si no está autenticado
+    exit();
+}
+
+$nicknamecurrent = $conn->real_escape_string($_SESSION['user']);
+
 $ingredientes_query = "SELECT Ing_iding, Ing_nombre FROM ingrediente";
 $ingredientes_result = $conn->query($ingredientes_query);
 
 $granos_query = "SELECT Gra_idgrano, Gra_nombre FROM grano";
 $granos_result = $conn->query($granos_query);
 
-$nicknames_query = "SELECT DISTINCT Rec_nickname FROM receta";
-$nicknames_result = $conn->query($nicknames_query);
+$metodos_query = "SELECT DISTINCT Rec_metodo FROM receta";
+$metodos_result = $conn->query($metodos_query);
 
-$nombres_query = "SELECT DISTINCT Rec_nombre FROM receta";
-$nombres_result = $conn->query($nombres_query);
-
-// Construir consulta dinámica
+// Construir consulta para mostrar solo recetas guardadas por el usuario
 $ingrediente = isset($_GET['ingrediente']) ? $_GET['ingrediente'] : null;
 $grano = isset($_GET['grano']) ? $_GET['grano'] : null;
-$nickname = isset($_GET['nickname']) ? $_GET['nickname'] : null;
-$nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
+$metodo = isset($_GET['metodo']) ? $_GET['metodo'] : null;
 $ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : null;
 
 $query = "
   SELECT DISTINCT R.*
   FROM receta R
-  LEFT JOIN cantidad_ingrediente CI ON R.Rec_idrec = CI.Can_idrec
-  LEFT JOIN ingrediente I ON CI.Can_iding = I.Ing_iding
-  LEFT JOIN grano G ON R.Rec_idgrano = G.Gra_idgrano
-  WHERE 1 = 1
+  INNER JOIN recetas_guardadas RG ON R.Rec_idrec = RG.receta_id
+  WHERE RG.user_id = '$nicknamecurrent'
 ";
 
 if ($ingrediente) {
@@ -43,17 +46,15 @@ if ($ingrediente) {
 }
 
 if ($grano) {
-  $query .= " AND G.Gra_idgrano = $grano";
+    $query .= " AND R.Rec_idgrano = $grano";
 }
-if ($nickname) {
-  $query .= " AND R.Rec_nickname = '$nickname'";
-}
-if ($nombre) {
-  $query .= " AND R.Rec_nombre = '$nombre'";
+
+if ($metodo) {
+    $query .= " AND R.Rec_metodo = '$metodo'";
 }
 
 if ($ordenar === 'ranking') {
-  $query .= " ORDER BY R.Rec_calificacion DESC";
+    $query .= " ORDER BY R.Rec_calificacion DESC";
 }
 
 $result = $conn->query($query);
@@ -165,14 +166,14 @@ $result = $conn->query($query);
         <!-- Filtro por método -->
         <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
           <label style="font-weight: bold; color: #6b4f33; cursor: pointer;">
-            <input type="checkbox" onclick="toggleFilter('nombreFilter')" style="margin-right: 10px;">
-            Nombre de receta
+            <input type="checkbox" onclick="toggleFilter('metodoFilter')" style="margin-right: 10px;">
+            Método
           </label>
-          <div id="nombreFilter" style="display: none; margin-top: 10px;">
-            <select name="nombre" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-              <option value="">Seleccione un Nombre</option>
-              <?php while ($row = $nombres_result->fetch_assoc()): ?>
-                <option value="<?= $row['Rec_nombre'] ?>"><?= $row['Rec_nombre'] ?></option>
+          <div id="metodoFilter" style="display: none; margin-top: 10px;">
+            <select name="metodo" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">Seleccione un método</option>
+              <?php while ($row = $metodos_result->fetch_assoc()): ?>
+                <option value="<?= $row['Rec_metodo'] ?>"><?= $row['Rec_metodo'] ?></option>
               <?php endwhile; ?>
             </select>
           </div>

@@ -1,8 +1,18 @@
 <?php 
 include 'recetas_inicio.php'; 
 include 'conexion.php'; // Conexión a la base de datos
-
 // Obtener datos para los filtros
+
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+if (!isset($_SESSION['user'])) {
+    header("Location: iniciar_sesion.php"); // Redirige al inicio de sesión si no está autenticado
+    exit();
+}
+$mostrarMensaje = false;
+$nicknamecurrent = $conn->real_escape_string($_SESSION['user']);
+
 $ingredientes_query = "SELECT Ing_iding, Ing_nombre FROM ingrediente";
 $ingredientes_result = $conn->query($ingredientes_query);
 
@@ -28,7 +38,7 @@ $query = "
   LEFT JOIN cantidad_ingrediente CI ON R.Rec_idrec = CI.Can_idrec
   LEFT JOIN ingrediente I ON CI.Can_iding = I.Ing_iding
   LEFT JOIN grano G ON R.Rec_idgrano = G.Gra_idgrano
-  WHERE 1 = 1
+  WHERE 1 = 1 && R.Rec_nickname = '$nicknamecurrent'
 ";
 
 if ($ingrediente) {
@@ -57,6 +67,7 @@ if ($ordenar === 'ranking') {
 }
 
 $result = $conn->query($query);
+$mostrarMensaje = true;
 ?>
 
 <!DOCTYPE html>
@@ -108,6 +119,11 @@ $result = $conn->query($query);
 </header>
 
 <main style="display: flex; gap: 20px; padding: 20px;">
+    <?php if ($mostrarMensaje): ?>
+                <div id="mensaje-calificacion">
+                    ¡Receta eliminada correctamente.! ☕✨
+                </div>
+        <?php endif; ?>
   <!-- Contenedor de filtros -->
   <aside style="width: 300px;">
     <form method="GET" action="">
@@ -170,7 +186,7 @@ $result = $conn->query($query);
           </label>
           <div id="nombreFilter" style="display: none; margin-top: 10px;">
             <select name="nombre" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-              <option value="">Seleccione un Nombre</option>
+              <option value="">Seleccione un método</option>
               <?php while ($row = $nombres_result->fetch_assoc()): ?>
                 <option value="<?= $row['Rec_nombre'] ?>"><?= $row['Rec_nombre'] ?></option>
               <?php endwhile; ?>
@@ -193,22 +209,38 @@ $result = $conn->query($query);
 
   <!-- Contenedor de recetas -->
   <section style="flex: 1;">
+    <!-- Mostrar mensajes de éxito o error -->
+    <?php if (isset($_GET['msg'])): ?>
+      <?php if ($_GET['msg'] === 'receta_eliminada'): ?>
+       <p style="color: green; text-align: center; margin-bottom: 10px;">Receta eliminada correctamente.</p>
+      <?php elseif ($_GET['msg'] === 'error'): ?>
+        <p style="color: red; text-align: center; margin-bottom: 10px;">Hubo un error al intentar eliminar la receta.</p>
+      <?php endif; ?>
+    <?php endif; ?>
     <div class="recipes">
       <?php if ($result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): ?>
           <a href="recetas.php?id=<?= $row['Rec_idrec'] ?>" class="recipe-link">
-            <div class="recipe-card">
-              <?php
-              $imageData = base64_encode($row['Rec_foto']);
-              $imageSrc = 'data:image/jpeg;base64,' . $imageData;
-              ?>
-              <img src="<?= $imageSrc ?>" alt="<?= $row['Rec_nombre'] ?>">
-              <h4><?= $row['Rec_nombre'] ?></h4>
-              <p class="rating">⭐ <?= $row['Rec_calificacion'] ?></p>
-              <span class="tag"><?= $row['Rec_clasificacion'] ?></span>
-              <p><?= $row['Rec_nickname'] ?></p>
-            </div>
-          </a>
+          <div class="recipe-card">
+            <?php
+            $imageData = base64_encode($row['Rec_foto']);
+            $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+            ?>
+            <img src="<?= $imageSrc ?>" alt="<?= $row['Rec_nombre'] ?>">
+            <h4><?= $row['Rec_nombre'] ?></h4>
+            <p class="rating">⭐ <?= $row['Rec_calificacion'] ?></p>
+            <span class="tag"><?= $row['Rec_clasificacion'] ?></span>
+            <p><?= $row['Rec_nickname'] ?></p>
+
+
+            <!-- Formulario para eliminar -->
+            <form method="POST" action="eliminar_receta.php" style="margin-top: 10px;">
+            <input type="hidden" name="id_receta" value="<?= $row['Rec_idrec'] ?>">
+            <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar esta receta?')" style="background-color: #ff6b6b; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+              Eliminar
+            </button>
+          </form>
+          </div>
         <?php endwhile; ?>
       <?php else: ?>
         <p>No hay recetas disponibles.</p>
@@ -220,5 +252,17 @@ $result = $conn->query($query);
 <footer>
   <p>Coffee-P &copy; Todos los derechos reservados.</p>
 </footer>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mensaje = document.getElementById('mensaje-calificacion');
+            if (mensaje) {
+                setTimeout(() => {
+                    mensaje.style.transition = "opacity 0.5s ease";
+                    mensaje.style.opacity = "0"; // Desvanecer
+                    setTimeout(() => mensaje.remove(), 500); // Eliminar después de 0.5 segundos
+                }, 2000); // Esperar 3 segundos
+            }
+        });
+    </script>
 </body>
 </html>
