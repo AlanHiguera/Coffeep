@@ -48,7 +48,7 @@ if ($result->num_rows > 0) {
       <ul>
         <li><a href="inicio.php">Inicio</a></li>
         <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Información</a></li>
+        <li><a href="guia.php">Infromación</a></li>
       </ul>
       <div class="icons">
         <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
@@ -79,7 +79,7 @@ if ($result->num_rows > 0) {
         <h3><?php echo $_SESSION['user']; ?></h3>
         <p><?php echo $firstname; ?> <?php echo $lastname; ?> | <?php echo $age; ?> años</p>
         <p><?php echo $email; ?></p>
-        <a href="#">Editar perfil</a>
+        <a href="editar_perfil.php">Editar perfil</a>
       </div>
   
       <!-- Opciones de Usuario -->
