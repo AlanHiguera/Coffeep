@@ -19,23 +19,22 @@ if (!isset($_SESSION['user'])) {
   <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-<body>
-<!-- Encabezado -->
+  <!-- Encabezado -->
   <header>
     <nav>
       <ul>
-        <li><a href="mantenedor_ting.php">Mantenedor</a></li>
-        <li><a href="generar_listusu.php">Listado</a></li>
+        <li><a href="inicio.php">Inicio</a></li>
+        <li><a href="contacto.php">Contacto</a></li>
       </ul>
       <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
+      <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
         <span class="user">
         <?php if (isset($_SESSION['user'])): ?>
           <a href="perfil_admin.php">
             <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
           </a>
         <?php else: ?>
-          <a href="registro.php">
+          <a href="registro.html">
             <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
           </a>
         <?php endif; ?>
@@ -46,58 +45,96 @@ if (!isset($_SESSION['user'])) {
   <div class="container">
     <div class="table-container">
       <h2>Lista de Usuarios</h2>
-      <table>
-    <thead>
-        <tr>
-            <th>Foto</th>
-            <th>Nickname</th>
-            <th>Correo</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Rol</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
-        </tr>
-    </thead>
-    <tbody>
+        <tbody>
         <?php
         // Conexión a la base de datos
         include "conexion.php";
-
-        // Consulta para obtener los usuarios
+        echo "<table>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th>Foto</th>";
+        echo "<th>Nickname</th>";
+        echo "<th>Correo</th>";
+        echo "<th>Nombre</th>";
+        echo "<th>Apellido</th>";
+        echo "<th>Rol</th>";
+        echo "<th>Estado</th>";
+        echo "<th>Cambiar estado</th>";
+        echo "<th>Editar datos</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        // Obtener los usuarios desde la función
         $sql_check = "SELECT * FROM usuario";
-        $result = $conn->query($sql_check);
+        $usuarios = $conn->query($sql_check);
+        
+        
+        if ($usuarios->num_rows > 0) {
+          // Imprimir filas de la tabla
+          while ($row = $usuarios->fetch_assoc()) {
+            echo "<tr>";
+            // Codificar la imagen en base64
+            $imageData = base64_encode($row['Usu_foto']);
+            $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+        
+            // Mostrar la imagen
+        
+            // Mostrar los datos del usuario
+            echo "<td><img src='" . $imageSrc . "' alt='' style='width: 50px; height: 50px;' /></td>";
+            echo "<td>" . htmlspecialchars($row['Usu_nickname']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Usu_correo']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Usu_nombre']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Usu_apellido']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Usu_rol']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Usu_estado']) . "</td>";
+        
+            // Enlace para cambiar el estado
+            echo "<td><a class='change-status' href='cambiar_estado.php?nickname=" . htmlspecialchars($row['Usu_nickname']) . "'>Cambiar estado</a></td>";
+        
+            // Formulario para editar datos
+            echo "<td>";
+            echo "<form action='editar_usuario.php' method='POST' enctype='multipart/form-data' class='edit-form' style='display: flex; flex-direction: column; gap: 10px; align-items: flex-start;'>"; // Flexbox para mejor alineación
+            echo "<input type='hidden' name='nickname' value='" . htmlspecialchars($row['Usu_nickname']) . "'>";
 
-        if ($result->num_rows > 0) {
-            // Imprimir filas de la tabla
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                
-                // Codificar la imagen en base64
-                $imageData = base64_encode($row['Usu_foto']);
-                $imageSrc = 'data:image/jpeg;base64,' . $imageData;
-                
-                // Mostrar la imagen
-                echo "<td> <img src='" . $imageSrc . "' alt='' style='width: 50px;height:50px;' /> </td>";
-                
-                // Mostrar los datos del usuario
-                echo "<td>" . $row['Usu_nickname'] . "</td>";
-                echo "<td>" . $row['Usu_correo'] . "</td>";
-                echo "<td>" . $row['Usu_nombre'] . "</td>";
-                echo "<td>" . $row['Usu_apellido'] . "</td>";
-                echo "<td>" . $row['Usu_rol'] . "</td>";
-                echo "<td><a class='edit' href='#" . $row['Usu_nickname'] . "'>Editar</a></td>";
-                echo "<td><a class='delete' href='#" . $row['Usu_nickname'] . "'>Eliminar</a></td>";
-                echo "</tr>";
+            // Estilizando los campos
+            echo "<div class='form-group' style='width: 100%;'>";
+            echo "<label for='nombre' style='font-weight: bold;'>Nombre:</label>";
+            echo "<input type='text' id='nombre' name='nombre' value='" . htmlspecialchars($row['Usu_nombre']) . "' placeholder='Nombre' required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;'>";
+            echo "</div>";
+
+            echo "<div class='form-group' style='width: 100%;'>";
+            echo "<label for='apellido' style='font-weight: bold;'>Apellido:</label>";
+            echo "<input type='text' id='apellido' name='apellido' value='" . htmlspecialchars($row['Usu_apellido']) . "' placeholder='Apellido' required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;'>";
+            echo "</div>";
+
+            echo "<div class='form-group' style='width: 100%;'>";
+            echo "<label for='correo' style='font-weight: bold;'>Correo:</label>";
+            echo "<input type='email' id='correo' name='correo' value='" . htmlspecialchars($row['Usu_correo']) . "' placeholder='Correo' required style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;'>";
+            echo "</div>";
+
+            echo "<div class='form-group' style='width: 100%;'>";
+            echo "<label for='foto' style='font-weight: bold;'>Actualizar foto:</label>";
+            echo "<input type='file' id='foto' name='foto' accept='image/*' required style='padding: 5px;'>";
+            echo "</div>";
+
+            // Botón estilizado
+            echo "<button type='submit' style='padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;'>Actualizar</button>";
+            echo "</form>";
+            echo "</td>";
+            echo "</tr>";
             }
         } else {
             echo "<tr><td colspan='8'>No hay usuarios registrados</td></tr>";
         }
-
+        
+        echo '</tbody>';
+        echo '</table>';
+        
+        // Cerrar la conexión a la base de datos
         $conn->close();
         ?>
-    </tbody>
-</table>
+        </tbody>
+      </table>
     </div>
   </div>
 
