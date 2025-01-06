@@ -6,6 +6,8 @@ if (!isset($_SESSION['user'])) {
 }
 
 include 'conexion.php'; // Archivo para conectar a la base de datos
+
+$mostrarMensaje = false;
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +52,12 @@ include 'conexion.php'; // Archivo para conectar a la base de datos
                 <?php endif; ?>
 
                 <form action="publicar_receta.php" method="POST" enctype="multipart/form-data">
+                    <?php
+                    if (isset($_SESSION['mensaje'])) {
+                        echo '<div id="mensaje-style">' . $_SESSION['mensaje'] . '</div>';
+                        unset($_SESSION['mensaje']); // Elimina el mensaje después de mostrarlo
+                    }
+                    ?>
                     <!-- Nombre de la receta -->
                     <div class="form-group">
                         <label for="rec_nombre">Nombre de la receta:</label>
@@ -101,6 +109,9 @@ include 'conexion.php'; // Archivo para conectar a la base de datos
 
                     <!-- Botón de enviar -->
                     <button type="submit" class="btn-primary">Publicar Receta</button>
+                    <?php
+                        $mostrarMensaje = true;
+                    ?>
 
                     <p class="nota-foto">
                     *Al publicar esta receta declaras que la información presente no contiene productos dañinos para la salud ni presenta uso de lenguaje inadecuado. Ante cualquier incumplimiento de normas, asumes total responsabilidad de lo presente en la publicación.
@@ -138,6 +149,17 @@ include 'conexion.php'; // Archivo para conectar a la base de datos
                 const preview = document.getElementById('foto-preview');
                 preview.src = URL.createObjectURL(file);
                 preview.style.display = 'block';
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const mensaje = document.getElementById('mensaje-style');
+            if (mensaje) {
+                setTimeout(() => {
+                    mensaje.style.transition = "opacity 0.5s ease";
+                    mensaje.style.opacity = "0"; // Desvanecer
+                    setTimeout(() => mensaje.remove(), 500); // Eliminar después de 0.5 segundos
+                }, 2000); // Esperar 3 segundos
             }
         });
     </script>
