@@ -11,16 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
     $nombre = $_POST['nombre'];
 
-    // Imprimir datos recibidos para depuración (opcional)
-    error_log("ID recibido: $id");
-    error_log("Nombre recibido: $nombre");
-
-    // Verificar que los datos no estén vacíos
-    if (empty($id) || empty($nombre)) {
-        echo "Error: Datos incompletos.";
-        exit();
-    }
-
     // Consulta clásica para actualizar el nombre
     $sql_update = "UPDATE tipo_ingrediente SET Tip_nombre = '$nombre' WHERE Tip_idtipo = $id";
 
