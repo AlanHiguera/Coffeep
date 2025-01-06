@@ -98,7 +98,38 @@ if (isset($_GET['id'])) {
             $comentarios[] = $comentario;
         }
     }
-    
+
+    // Manejar el guardado o desguardado de la receta
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_receta'])) {
+        $idReceta = intval($_POST['guardar_receta']);
+        $usuario = $_SESSION['user']; // Usuario autenticado
+
+        // Verificar si la receta ya está guardada
+        $sqlVerificarGuardado = "SELECT * FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
+        $resultadoVerificar = $conn->query($sqlVerificarGuardado);
+
+        if ($resultadoVerificar->num_rows > 0) {
+            // Si está guardada, eliminarla (desguardar)
+            $sqlDesguardar = "DELETE FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
+            if ($conn->query($sqlDesguardar)) {
+                $mensajeGuardar = "Receta eliminada de tus guardados.";
+            } else {
+                $mensajeGuardar = "Hubo un error al intentar desguardar la receta.";
+            }
+        } else {
+            // Si no está guardada, agregarla
+            $sqlGuardar = "INSERT INTO guardado (Gua_nickname, Gua_idrec) VALUES ('$usuario', $idReceta)";
+            if ($conn->query($sqlGuardar)) {
+                $mensajeGuardar = "¡Receta guardada correctamente!☕✨";
+            } else {
+                $mensajeGuardar = "Hubo un error al guardar la receta.";
+            }
+        }
+    }
+
+    // Verificar si la receta ya está guardada
+    $sqlVerificarGuardadoInicial = "SELECT * FROM guardado WHERE Gua_nickname = '{$_SESSION['user']}' AND Gua_idrec = $id";
+    $estaGuardada = ($conn->query($sqlVerificarGuardadoInicial)->num_rows > 0);
 } else {
     echo "ID de receta no especificado.";
     exit;
@@ -160,37 +191,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
 <!-- Encabezado -->
 <header>
     <nav>
-      <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Información</a></li>
-      </ul>
-      <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="miperfil.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php else: ?>
-          <a href="registro.html">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php endif; ?>
-        </span>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
 
 <main>
     <?php if ($mostrarMensaje): ?>
-            <div id="mensaje-calificacion">
+            <div id="mensaje-style">
                 ¡Gracias por tu calificación! ☕✨
             </div>
         <?php endif; ?>
     <div class="recipe-detail">
         <img src="data:image/jpeg;base64,<?= base64_encode($receta['Rec_foto']) ?>" alt="<?= $receta['Rec_nombre'] ?>">
-        <h1><?= $receta['Rec_nombre']?> </h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1><?= $receta['Rec_nombre'] ?></h1>
+            <form method="POST" style="margin: 0;">
+                <input type="hidden" name="guardar_receta" value="<?= $id ?>">
+                <button type="submit" class="save-button">
+                    <?= $estaGuardada ? "<img src='images/quitar.png' style='width: 40px; height: 40px;'></a>" : "<img src='images/guardar.png' style='width: 40px; height: 40px;'></a>" ?>
+                </button>
+                <!-- Mostrar mensaje de guardar receta -->
+                <?php if (isset($mensajeGuardar)): ?>
+                    <div id="mensaje-style">
+                        <?= htmlspecialchars($mensajeGuardar) ?>
+                    </div>
+                <?php endif; ?>
+            </form>
+        </div>
         <p><b>Clasificación:</b> <?= $receta['Rec_clasificacion']?></p>
         <p><b>Autor/a:</b> <?= $receta['Rec_nickname'] ?></p>
         <p><b>Fecha de publicación:</b> <?= $receta['Rec_fecha_pub'] ?></p>
@@ -235,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
         </form>
     </div>
 
-   <!-- Sección de comentarios -->
+ <!-- Sección de comentarios -->
 <div class="comments-section">
     <h2>Comentarios</h2>
     <?php if ($resultComentarios && $resultComentarios->num_rows > 0): ?>
@@ -244,7 +296,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
                 <p><strong><?= htmlspecialchars($comentario['Com_nickname']) ?>:</strong> <?= htmlspecialchars($comentario['Com_contenido']) ?></p>
                 <small><?= htmlspecialchars($comentario['Com_fecha']) ?></small>
     
-                <?php if ($comentario['Com_nickname'] === $_SESSION['user']): ?>
+                <!-- Verificar si el usuario puede eliminar el comentario -->
+                <?php if ($_SESSION['rol'] === 'Administrador' || $comentario['Com_nickname'] === $_SESSION['user']): ?>
                     <form action="" method="POST" style="display:inline;">
                         <input type="hidden" name="idcomentario" value="<?= $comentario['Com_idcom'] ?>">
                         <button type="submit" name="eliminar_comentario">Eliminar</button>
@@ -260,7 +313,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
                             <p><strong><?= htmlspecialchars($respuesta['Com_nickname']) ?>:</strong> <?= htmlspecialchars($respuesta['Com_contenido']) ?></p>
                             <small><?= htmlspecialchars($respuesta['Com_fecha']) ?></small>
                             
-                            <?php if ($respuesta['Com_nickname'] === $_SESSION['user']): ?>
+                            <!-- Verificar si el usuario puede eliminar la respuesta -->
+                            <?php if ($_SESSION['rol'] === 'Administrador' || $respuesta['Com_nickname'] === $_SESSION['user']): ?>
                                 <form action="" method="POST" style="display:inline;">
                                     <input type="hidden" name="idcomentario" value="<?= $respuesta['Com_idcom'] ?>">
                                     <button type="submit" name="eliminar_comentario">Eliminar</button>
@@ -290,6 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
     </form>
 </div>
 
+
 <script>
         document.addEventListener("DOMContentLoaded", () => {
             const mensaje = document.getElementById('mensaje-calificacion');
@@ -301,9 +356,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
                 }, 2000); // Esperar 3 segundos
             }
         });
-</script>
-
-<script>
+        
     document.addEventListener('DOMContentLoaded', () => {
         const replyButtons = document.querySelectorAll('.show-replies-btn');
         
@@ -322,9 +375,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
             });
         });
     });
-</script>
 
-<script>
    document.addEventListener('DOMContentLoaded', () => {
     // Lógica para eliminar comentarios dinámicamente
     document.querySelectorAll('form[action=""]').forEach(form => {
@@ -337,6 +388,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
             });
         }
     });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const mensajeGuardar = document.getElementById('mensaje-style');
+    if (mensajeGuardar) {
+        setTimeout(() => {
+            mensajeGuardar.style.transition = "opacity 0.5s ease";
+            mensajeGuardar.style.opacity = "0"; // Desvanecer
+            setTimeout(() => mensajeGuardar.remove(), 500); // Eliminar después de 0.5 segundos
+        }, 3000); // Mostrar el mensaje por 3 segundos
+    }
 });
 
 </script>
