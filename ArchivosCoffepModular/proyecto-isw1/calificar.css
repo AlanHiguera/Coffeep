@@ -4,6 +4,7 @@
     flex-direction: row-reverse; /* Invertir el flujo de los elementos */
     justify-content: center;
     gap: 10px; /* Espaciado entre estrellas */
+    margin: 20px;
 }
 
 /* Ocultar los botones de radio */
@@ -15,7 +16,7 @@
 .stars label.starelement {
     width: 50px;
     height: 50px;
-    background-color: gray; /* Estrellas no seleccionadas en gris */
+    background-color:  #a17157;
     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
     transition: background-color 0.3s ease;
     display: inline-block;
@@ -32,3 +33,4 @@
 .stars label.starelement:hover ~ label.starelement {
     background-color: gold;
 }
+

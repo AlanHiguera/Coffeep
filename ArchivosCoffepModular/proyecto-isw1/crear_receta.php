@@ -26,16 +26,16 @@ $ingredientes = mysqli_query($conn, "SELECT Ing_iding, Ing_nombre FROM ingredien
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-    <!-- Encabezado -->
-    <header>
+<!-- Encabezado -->
+<header>
     <nav>
         <ul>
             <li><a href="inicio.php">Inicio</a></li>
             <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
         </ul>
         <div class="icons">
             <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
-            <span class="user">
             <?php 
             if (isset($_SESSION['user'])): 
                 // Verificar el rol y ajustar el enlace
@@ -47,16 +47,16 @@ $ingredientes = mysqli_query($conn, "SELECT Ing_iding, Ing_nombre FROM ingredien
                     <a href="miperfil.php">
                         <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
                     </a>
-                <?php endif; 
-            else: ?>
-                <a href="registro.html">
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
                     <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
                 </a>
             <?php endif; ?>
             </span>
         </div>
     </nav>
-</header>
+  </header>
 
     <!-- Contenido principal -->
     <main>
@@ -135,7 +135,7 @@ $ingredientes = mysqli_query($conn, "SELECT Ing_iding, Ing_nombre FROM ingredien
                         <label for="rec_foto">Añadir Foto:</label>
                         <input type="file" id="rec_foto" name="rec_foto" accept="image/*" required>
                     </div>
-                   <!-- <button type="submit" class="btn-primary">Subir Foto</button> -->
+                   <button type="submit" class="btn-primary">Subir Foto</button>
                 </form>
             </div>
         </div>

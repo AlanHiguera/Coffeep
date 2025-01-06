@@ -39,29 +39,39 @@ if ($result->num_rows > 0) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="perfiles.css">
-  <link rel="icon" href="proyecto-isw1/images/favicon.png">
+  <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-  <!-- Encabezado -->
-  <header>
+<!-- Encabezado -->
+<!-- Encabezado -->
+<header>
     <nav>
-      <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-      </ul>
-      <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="miperfil.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php else: ?>
-          <a href="registro.html">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php endif; ?>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
   
@@ -69,9 +79,13 @@ if ($result->num_rows > 0) {
     <div class="container">
       <!-- Perfil del Usuario -->
       <div class="sidebar">
-        <img src="images/user.png" alt="Perfil">
+        <?php
+          $imageData = base64_encode($row['Usu_foto']);
+          $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+        ?>
+        <img src="<?= $imageSrc ?>">
         <h3><?php echo $_SESSION['user']; ?></h3>
-        <p><?php echo $firstname; ?> <?php echo $lastname; ?> | <?php echo $age; ?></p>
+        <p><?php echo $firstname; ?> <?php echo $lastname; ?> | <?php echo $age; ?> años</p>
         <p><?php echo $email; ?></p>
         <a href="editar_perfil.php">Editar perfil</a>
       </div>
@@ -79,10 +93,10 @@ if ($result->num_rows > 0) {
       <!-- Opciones de Usuario -->
       <div class="content">
         <h3>Opciones</h3>
-        <a href="crear_receta.php"><button>Crear Receta</button></a>
-        <a href="recetas_guardadas.php"><button>Recetas Guardadas</button></a>
-        <a href="mis_recetas.php"><button>Mis Recetas</button></a>
-        <a href="cerrar_sesion.php"><button>Cerrar Sesión</button></a>
+        <a href="crear_receta.php"><button><b>Crear receta</b></button></a>
+        <a href="recetas_guardadas.php"><button><b>Recetas guardadas</b></button></a>
+        <a href="mis_recetas.php"><button><b>Mis recetas</b></button></a>
+        <a href="cerrar_sesion.php"><button><b>Cerrar sesión</b></button></a>
       </div>
     </div>
   </main>

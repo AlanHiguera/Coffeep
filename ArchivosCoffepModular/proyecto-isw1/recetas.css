@@ -1,43 +1,301 @@
-main {
+html {
+    font-family: 'Montserrat', sans-serif;
+    height: 100%;
+  }
+  
+* { /* Reset */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+      color: #252525;
+      background-color: #f8f4f1;
+      display: flex;
+      flex-direction: column; /* Colocar header, main, y footer en una columna */
+      min-height: 100%; 
+      height: 100%;
+  }
+  
+  header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #d3b8a4;
+      padding: 30px 40px;
+  }
+  
+  header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+  }
+  
+  header nav ul li a {
+      text-decoration: none;
+      color: #252525;
+  }
+  
+  header .icons {
+      display: flex;
+      gap: 15px;
+  }
+  
+  header .icons span {
+      width: 26px;
+      height: 26px;
+      background-color: #cfc0b400;
+      border-radius: 50%;
+      display: inline-block;
+  }
+  
+  nav li a:hover {
+      text-decoration: underline;
+  }
+
+  main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     padding: 20px;
-    flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+    gap: 20px;
 }
 
+/* Detalles de la receta */
 .recipe-detail {
-    max-width: 800px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+    width: 45%;
+    background-color: #fff;
+    border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
 }
 
 .recipe-detail img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.recipe-detail li {
+    line-height: 1.5;
+    margin-left: 20px;
 }
 
 .recipe-detail h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.recipe-detail p {
-    font-size: 16px;
-    margin: 5px 0;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #a17157;
 }
 
 .recipe-detail h3 {
-    margin-top: 20px;
-    font-size: 18px;
-    color: #333;
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    color: #a17157;
+}
+
+.recipe-detail p {
+    line-height: 1.5;
 }
 
 .containerRecetas {
     display: flex;
 }
+
+.rating-form {
+    text-align: center;
+}
+
+.rating-form button {
+    padding: 0.8rem 1.5rem;
+    background-color: #c68c6c;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    align-self: flex-end;
+    transition: background-color 0.3s;
+}
+
+.rating-form button:hover {
+    background-color: #a17157;
+}
+
+/* Sección de comentarios */
+.comments-section {
+    width: 40%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comments-section h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 2px dashed #000;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.comment {
+    background-color: #f1e3d8;
+    border-radius: 8px;
+    padding: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.comment p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.comment small {
+    display: block;
+    text-align: right;
+    color: #a17157;
+    font-size: 0.8rem;
+}
+
+/* Formulario de comentarios */
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 0.8rem;
+    font-size: 1rem;
+    resize: none;
+}
+
+.comment-form button {
+    padding: 0.8rem 1.5rem;
+    background-color: #c68c6c;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.3s;
+}
+
+.comment-form button:hover {
+    background-color: #a17157;
+}
+
+.reply-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.reply-form textarea {
+    width: 100%;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 0.8rem;
+    font-size: 15px;
+    resize: none;
+}
+
+
+.replies {
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    border-left: 2px solid #c68c6c;
+    padding-left: 0.5rem;
+}
+
+.reply {
+    background-color: #f8f4f1;
+    border-radius: 5px;
+    padding: 0.6rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.5rem;
+}
+
+    
+.reply-form button {
+    padding: 0.8rem 1.0rem;
+    background-color: #c68c6c;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.3s;
+}
+
+.reply-form button:hover {
+    background-color: #a17157;
+}
+
+.show-replies-btn {
+    background: none;           /* Elimina el fondo del botón */
+    border: none;               /* Elimina el borde del botón */
+    color: #000000;                /* Color del texto */
+    text-decoration: underline; /* Subraya el texto */
+    cursor: pointer;           /* Cambia el cursor al pasar sobre el texto */
+    font-size: 13px;            /* Ajusta el tamaño de la fuente si lo deseas */
+}
+
+form button[name="eliminar_comentario"] {
+    background-color: #cf3939;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+form button[name="eliminar_comentario"]:hover {
+    background-color: #a32c2c;
+}
+
+.save-button {
+    background-color: #d3b8a400;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #b89d8700;
+}
+
+.mensaje {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #4caf50;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+
 #mensaje-calificacion {
     position: fixed; /* Fija el mensaje en la pantalla */
     top: 10px; /* Espaciado desde la parte superior */
@@ -47,9 +305,16 @@ main {
     background-color: #f8e8d8;
     border: 2px solid #d6b8a9;
     border-radius: 10px;
-    color: #6b4f33;
+    color: #a17157;
     font-size: 18px;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000; /* Para que quede encima */
 }
+
+footer {
+    text-align: center;
+    background-color: #d3b8a4;
+    padding: 20px;
+    font-size: 14px;
+  }

@@ -1,5 +1,6 @@
 html {
   font-family: 'Montserrat', sans-serif;
+  height: 100%;
 }
 
 * { /* Reset */
@@ -7,51 +8,54 @@ html {
   padding: 0;
   box-sizing: border-box;
 }
-  
+
 body {
-  color: #252525;
-  background-color: #f8f4f1;
+    color: #252525;
+    background-color: #f8f4f1;
+    display: flex;
+    flex-direction: column; /* Colocar header, main, y footer en una columna */
+    min-height: 100%; 
+    height: 100%;
 }
-  
+
 header nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #d3b8a4;
-  padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d3b8a4;
+    padding: 30px 40px;
 }
-  
+
 header nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
+    list-style: none;
+    display: flex;
+    gap: 20px;
 }
-  
+
 header nav ul li a {
-  text-decoration: none;
-  color: #252525;
+    text-decoration: none;
+    color: #252525;
 }
-  
+
 header .icons {
-  display: flex;
-  gap: 15px;
+    display: flex;
+    gap: 15px;
 }
-  
+
 header .icons span {
-  width: 26px;
-  height: 26px;
-  background-color: #cfc0b400;
-  border-radius: 50%;
-  display: inline-block;
+    width: 26px;
+    height: 26px;
+    background-color: #cfc0b400;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 nav li a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
-
 main {
-padding: 20px;
-flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+    flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+    padding: 20px;
 }
 
 .container {
@@ -102,9 +106,18 @@ td a.delete {
   color: #b33030;
 }
 
+a.change-status { color: #b33030; } /* Globally */
+
+/* Each state */
+a.change-status:visited { text-decoration: none; color: #b33030; }
+a.change-status:hover { text-decoration: none; color: #b33030; }
+a.change-status:focus { text-decoration: none; color: #b33030; }
+a.change-status:hover, a:active { text-decoration: none; color: #b33030; }
+
+
 footer {
-    text-align: center;
-    background-color: #d3b8a4;
-    padding: 20px;
-    font-size: 14px;
-  }
+  text-align: center;
+  background-color: #d3b8a4;
+  padding: 20px;
+  font-size: 14px;
+}

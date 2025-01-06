@@ -1,0 +1,299 @@
+html {
+    font-family: 'Montserrat', sans-serif;
+    height: 100%;
+}
+  
+* { /* Reset */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+      color: #252525;
+      background-color: #f8f4f1;
+      display: flex;
+      flex-direction: column; /* Colocar header, main, y footer en una columna */
+      min-height: 100%; 
+      height: 100%;
+  }
+  
+  header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #d3b8a4;
+      padding: 30px 40px;
+  }
+  
+  header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+  }
+  
+  header nav ul li a {
+      text-decoration: none;
+      color: #252525;
+  }
+  
+  header .icons {
+      display: flex;
+      gap: 15px;
+  }
+  
+  header .icons span {
+      width: 26px;
+      height: 26px;
+      background-color: #cfc0b400;
+      border-radius: 50%;
+      display: inline-block;
+  }
+  
+  nav li a:hover {
+      text-decoration: underline;
+  }
+
+  main {
+      flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
+      padding: 20px;
+  }  
+
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 2rem auto;
+    gap: 2rem; /* Espacio entre los contenedores */
+}
+
+/* Contenedor de filtros */
+.filters-container {
+    flex: 0 0 280px; /* Fija el ancho de los filtros */
+}
+
+/* Contenedor de recetas */
+.recipes-container {
+    flex: 1; /* Toma el resto del espacio disponible */
+}
+
+.recipes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+  
+/* Estilos generales para el contenedor */
+.filters {
+    background-color: #f1e3d8; /* Fondo beige */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: 100%;
+    border-radius: 10px;
+    width: 280px;
+}
+
+.filters h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 2px dashed #000;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+/* Grupo de filtros */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilo para cada filtro */
+.filter-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Checkbox */
+.filter-group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none; /* Compatibilidad con Safari */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #c68c6c; /* Borde inicial */
+    border-radius: 4px; /* Forma cuadrada con bordes redondeados */
+    background-color: #fff; /* Fondo blanco inicial */
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+
+/* Checkbox seleccionado */
+.filter-group input[type="checkbox"]:checked {
+    background-color: #c68c6c; /* Fondo marrón claro al seleccionarlo */
+    border-color: #252525; /* Cambia el borde al seleccionarse */
+}
+
+.filter-group input[type="checkbox"]:checked::after {
+    content: "✔"; /* Símbolo personalizado */
+    font-size: 16px;
+    color: rgb(0, 0, 0); /* Color del símbolo ✔ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Texto del filtro */
+.filter-group span {
+    font-size: 15px;
+    font-weight: normal;
+    margin: 5px;
+}
+
+/* Hover */
+.filter-group span:hover {
+    font-weight: bold;
+    color: #252525;
+    cursor: pointer;
+}
+
+.filters button:hover {
+    background-color: #a17157;
+}
+
+.filters button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #c68c6c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Contenedor de las opciones desplegables */
+.filter-options {
+    display: none; /* Ocultas por defecto */
+    margin-left: 10px;
+    margin-top: 10px;
+    border-left: 2px solid #c68c6c;
+    padding-left: 10px;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.filter-options label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Opciones activas */
+.filter-options.active {
+    display: flex; /* Mostrar cuando sea activo */
+}
+
+.recipe-link {
+    text-decoration: none; /* Elimina el subrayado */
+    color: inherit; /* Usa el color del texto circundante */
+  }
+  
+.recipe-link:visited {
+    color: inherit; /* Evita que el color cambie al ser presionado */
+  }
+  
+.recipe-link:hover {
+    text-decoration: none; /* Mantiene sin cambios cuando el mouse pasa por encima */
+  }
+  
+.recipe-link:active {
+    color: inherit; /* No cambia el color al hacer clic */
+  }
+  
+  /* Recetas */
+  .recipes {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  
+  .recipe-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    height: 330px;
+    padding: 15px;
+    transition: transform 0.3s ease;
+  }
+  
+  .recipe-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .recipe-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .recipe-card h4 {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .recipe-card .rating {
+    margin: 0.5rem 0;
+    color: #ffd000;
+}
+  
+.recipe-card .tag {
+    font-size: 0.9rem;
+    color: #fff;
+    background-color: #c68c6c;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.search-bar {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #c68c6c;
+    border-radius: 5px 0 0 5px;
+    font-size: 14px;
+    color: #252525;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #c68c6c;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-bar button:hover {
+    background-color: #a17157;
+}
+
+footer {
+    text-align: center;
+    background-color: #d3b8a4;
+    padding: 20px;
+    font-size: 14px;
+  }
