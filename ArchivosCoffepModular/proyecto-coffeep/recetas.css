@@ -270,7 +270,23 @@ form button[name="eliminar_comentario"]:hover {
     background-color: #a32c2c;
 }
 
-#mensaje-calificacion {
+.save-button {
+    background-color: #d3b8a400;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #b89d8700;
+}
+
+
+#mensaje-style {
     position: fixed; /* Fija el mensaje en la pantalla */
     top: 10px; /* Espaciado desde la parte superior */
     left: 50%; /* Posiciona horizontalmente al 50% */
