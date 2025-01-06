@@ -75,7 +75,7 @@ if (isset($_GET['id'])) {
     }
 
     // Obtener los comentarios principales (sin respuesta a otro comentario)
-    $sqlComentarios = "SELECT * FROM comentario, usuario, receta WHERE Com_idrec = $id AND Rec_nickname = Com_nickname AND Rec_nickname = Usu_nickname AND Usu_estado = 'activo' AND Com_idresp IS NULL ORDER BY Com_fecha DESC";
+    $sqlComentarios = "SELECT * FROM comentario WHERE Com_idrec = $id AND Com_idresp IS NULL ORDER BY Com_fecha DESC";
     $resultComentarios = $conn->query($sqlComentarios);
 
     $comentarios = [];
@@ -98,43 +98,64 @@ if (isset($_GET['id'])) {
             $comentarios[] = $comentario;
         }
     }
-    $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : null;
+
     // Manejar el guardado o desguardado de la receta
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_receta'])) {
-        if($rol === 'usuario'){
-            $idReceta = intval($_POST['guardar_receta']);
-            $usuario = $_SESSION['user']; // Usuario autenticado
+        $idReceta = intval($_POST['guardar_receta']);
+        $usuario = $_SESSION['user']; // Usuario autenticado
 
-            // Verificar si la receta ya está guardada
-            $sqlVerificarGuardado = "SELECT * FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
-            $resultadoVerificar = $conn->query($sqlVerificarGuardado);
+        // Verificar si la receta ya está guardada
+        $sqlVerificarGuardado = "SELECT * FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
+        $resultadoVerificar = $conn->query($sqlVerificarGuardado);
 
-            if ($resultadoVerificar->num_rows > 0) {
-                // Si está guardada, eliminarla (desguardar)
-                $sqlDesguardar = "DELETE FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
-                if ($conn->query($sqlDesguardar)) {
-                    $mensajeGuardar = "Receta eliminada de tus guardados.";
-                } else {
-                    $mensajeGuardar = "Hubo un error al intentar desguardar la receta.";
-                }
+        if ($resultadoVerificar->num_rows > 0) {
+            // Si está guardada, eliminarla (desguardar)
+            $sqlDesguardar = "DELETE FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
+            if ($conn->query($sqlDesguardar)) {
+                $mensajeGuardar = "Receta eliminada de tus guardados.";
             } else {
-                // Si no está guardada, agregarla
-                $sqlGuardar = "INSERT INTO guardado (Gua_nickname, Gua_idrec) VALUES ('$usuario', $idReceta)";
-                if ($conn->query($sqlGuardar)) {
-                    $mensajeGuardar = "¡Receta guardada correctamente!☕✨";
-                } else {
-                    $mensajeGuardar = "Hubo un error al guardar la receta.";
-                }
+                $mensajeGuardar = "Hubo un error al intentar desguardar la receta.";
             }
-        }
-        else if($rol === 'Administrador'){
-            $mensajeGuardar = "Un administrador no guarda recetas.";
+        } else {
+            // Si no está guardada, agregarla
+            $sqlGuardar = "INSERT INTO guardado (Gua_nickname, Gua_idrec) VALUES ('$usuario', $idReceta)";
+            if ($conn->query($sqlGuardar)) {
+                $mensajeGuardar = "¡Receta guardada correctamente!";
+            } else {
+                $mensajeGuardar = "Hubo un error al guardar la receta.";
+            }
         }
     }
 
     // Verificar si la receta ya está guardada
     $sqlVerificarGuardadoInicial = "SELECT * FROM guardado WHERE Gua_nickname = '{$_SESSION['user']}' AND Gua_idrec = $id";
     $estaGuardada = ($conn->query($sqlVerificarGuardadoInicial)->num_rows > 0);
+
+    // Manejar la eliminación de recetas
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_receta'])) {
+        $idReceta = intval($_POST['eliminar_receta']);
+        $usuario = $_SESSION['user'];
+        $rol = $_SESSION['rol'];
+    
+        // Verificar si el usuario tiene permiso para eliminar la receta
+        $sqlVerificar = "SELECT * FROM receta WHERE Rec_idrec = $idReceta AND (Rec_nickname = '$usuario' OR '$rol' = 'Administrador')";
+        $resultadoVerificar = $conn->query($sqlVerificar);
+    
+        if ($resultadoVerificar && $resultadoVerificar->num_rows > 0) {
+            // Eliminar la receta
+            $sqlEliminarReceta = "DELETE FROM receta WHERE Rec_idrec = $idReceta";
+            if ($conn->query($sqlEliminarReceta)) {
+                // Redirigir tras la eliminación exitosa
+                header("Location: inicio.php"); // Cambia `inicio.php` por tu página principal
+                exit();
+            } else {
+                echo "Error al eliminar la receta.";
+            }
+        } else {
+            echo "No tienes permiso para eliminar esta receta.";
+        }
+    }
+    
 } else {
     echo "ID de receta no especificado.";
     exit;
@@ -146,39 +167,35 @@ $mostrarMensaje = false;
 
 // Manejar el envío de la calificación
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
-    if($rol === 'usuario'){
-        $calificacion = floatval($_POST['calificacion']);
-        $usuario = $_SESSION['user']; // Suponiendo que el usuario está autenticado y su nickname está en la sesión
-        $idReceta = $id;
+    $calificacion = floatval($_POST['calificacion']);
+    $usuario = $_SESSION['user']; // Suponiendo que el usuario está autenticado y su nickname está en la sesión
+    $idReceta = $id;
 
-        // Verificar si el usuario ya calificó esta receta
-        $sqlVerificar = "SELECT * FROM evaluacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
-        $resultadoVerificar = $conn->query($sqlVerificar);
+    // Verificar si el usuario ya calificó esta receta
+    $sqlVerificar = "SELECT * FROM evaluacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
+    $resultadoVerificar = $conn->query($sqlVerificar);
 
-        if ($resultadoVerificar->num_rows > 0) {
-            // Actualizar calificación existente
-            $sqlActualizar = "UPDATE evaluacion SET Eva_calificacion = $calificacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
-            $conn->query($sqlActualizar);
-        } else {
-            // Insertar nueva calificación
-            $sqlInsertar = "INSERT INTO evaluacion (Eva_nickname, Eva_idrec, Eva_calificacion, Eva_fecha) VALUES ('$usuario', $idReceta, $calificacion, NOW())";
-            $conn->query($sqlInsertar);
-        }
-
-        // Actualizar calificación promedio de la receta
-        $sqlPromedio = "SELECT AVG(Eva_calificacion) AS promedio FROM evaluacion WHERE Eva_idrec = $idReceta";
-        $resultadoPromedio = $conn->query($sqlPromedio);
-        if ($resultadoPromedio && $rowPromedio = $resultadoPromedio->fetch_assoc()) {
-            $calificacionPromedio = $rowPromedio['promedio'];
-            $sqlActualizarReceta = "UPDATE receta SET Rec_calificacion = $calificacionPromedio WHERE Rec_idrec = $idReceta";
-            $conn->query($sqlActualizarReceta);
-        }
+    if ($resultadoVerificar->num_rows > 0) {
+        // Actualizar calificación existente
+        $sqlActualizar = "UPDATE evaluacion SET Eva_calificacion = $calificacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
+        $conn->query($sqlActualizar);
+    } else {
+        // Insertar nueva calificación
+        $sqlInsertar = "INSERT INTO evaluacion (Eva_nickname, Eva_idrec, Eva_calificacion, Eva_fecha) VALUES ('$usuario', $idReceta, $calificacion, NOW())";
+        $conn->query($sqlInsertar);
     }
+
+    // Actualizar calificación promedio de la receta
+    $sqlPromedio = "SELECT AVG(Eva_calificacion) AS promedio FROM evaluacion WHERE Eva_idrec = $idReceta";
+    $resultadoPromedio = $conn->query($sqlPromedio);
+    if ($resultadoPromedio && $rowPromedio = $resultadoPromedio->fetch_assoc()) {
+        $calificacionPromedio = $rowPromedio['promedio'];
+        $sqlActualizarReceta = "UPDATE receta SET Rec_calificacion = $calificacionPromedio WHERE Rec_idrec = $idReceta";
+        $conn->query($sqlActualizarReceta);
+    }
+
     // Activar el mensaje
-    //$mostrarMensaje = true;
-    else if($rol === 'Administrador'){
-        $mensajeGuardar = "Un administrador no califica recetas.";
-    }
+    $mostrarMensaje = true;
 }
 
 ?>
@@ -231,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
 
 <main>
     <?php if ($mostrarMensaje): ?>
-            <div id="mensaje-style">
+            <div id="mensaje-calificacion">
                 ¡Gracias por tu calificación! ☕✨
             </div>
         <?php endif; ?>
@@ -246,12 +263,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
                 </button>
                 <!-- Mostrar mensaje de guardar receta -->
                 <?php if (isset($mensajeGuardar)): ?>
-                    <div id="mensaje-style">
+                    <div id="mensaje-guardar" class="mensaje">
                         <?= htmlspecialchars($mensajeGuardar) ?>
                     </div>
                 <?php endif; ?>
             </form>
         </div>
+
         <p><b>Clasificación:</b> <?= $receta['Rec_clasificacion']?></p>
         <p><b>Autor/a:</b> <?= $receta['Rec_nickname'] ?></p>
         <p><b>Fecha de publicación:</b> <?= $receta['Rec_fecha_pub'] ?></p>
@@ -272,6 +290,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
 
         <h3>Preparación:</h3>
         <p><?= nl2br($receta['Rec_preparacion']) ?></p><br>
+
+        <!-- Información nutricional -->
+        <h3>Información Nutricional:</h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <tr>
+                <th style="padding: 8px;">Grasas (g)</th>
+                <th style="padding: 8px;">Proteínas (g)</th>
+                <th style="padding: 8px;">Hidratos (g)</th>
+                <th style="padding: 8px;">Azúcares (g)</th>
+                <th style="padding: 8px;">Sodio (mg)</th>
+                <th style="padding: 8px;">Colesterol (mg)</th>
+            </tr>
+            <tr>
+                <td style="padding: 8px;"><?= htmlspecialchars($receta['Rec_grasas']) ?></td>
+                <td style="padding: 8px;"><?= htmlspecialchars($receta['Rec_proteinas']) ?></td>
+                <td style="padding: 8px;"><?= htmlspecialchars($receta['Rec_hidratos']) ?></td>
+                <td style="padding: 8px;"><?= htmlspecialchars($receta['Rec_azucares']) ?></td>
+                <td style="padding: 8px;"><?= htmlspecialchars($receta['Rec_sodio']) ?></td>
+                <td style="padding: 8px;"><?= htmlspecialchars($receta['Rec_colesterol']) ?></td>
+            </tr>
+        </table>
+
         
         <!-- Formulario de calificación -->
         <form method="POST" class="rating-form">
@@ -294,6 +334,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
             </div>
             <button type="submit">Enviar</button>
         </form>
+        
+        <!-- Eliminar recetas-->
+        <?php if ($_SESSION['rol'] === 'Administrador' || $_SESSION['user'] === $receta['Rec_nickname']): ?>
+            <form method="POST" style="margin-top: 20px;">
+                <input type="hidden" name="eliminar_receta" value="<?= $receta['Rec_idrec'] ?>">
+                <button type="submit" class="delete-button" onclick="return confirm('¿Estás seguro de que deseas eliminar esta receta? Esta acción no se puede deshacer.');">
+                    Eliminar receta
+                </button>
+            </form>
+        <?php endif; ?>
+
     </div>
 
  <!-- Sección de comentarios -->
@@ -400,7 +451,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const mensajeGuardar = document.getElementById('mensaje-style');
+    const mensajeGuardar = document.getElementById('mensaje-guardar');
     if (mensajeGuardar) {
         setTimeout(() => {
             mensajeGuardar.style.transition = "opacity 0.5s ease";

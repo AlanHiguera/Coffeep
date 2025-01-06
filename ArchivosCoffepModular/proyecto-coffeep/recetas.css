@@ -67,7 +67,7 @@ html {
     width: 45%;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
 }
 
@@ -130,7 +130,7 @@ html {
     width: 40%;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -149,7 +149,7 @@ html {
     background-color: #f1e3d8;
     border-radius: 8px;
     padding: 0.8rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 1rem;
 }
 
@@ -225,7 +225,7 @@ html {
     background-color: #f8f4f1;
     border-radius: 5px;
     padding: 0.6rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 0.5rem;
 }
 
@@ -257,7 +257,7 @@ html {
 }
 
 form button[name="eliminar_comentario"] {
-    background-color: #cf3939;
+    background-color: #ff4d4d;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -267,7 +267,7 @@ form button[name="eliminar_comentario"] {
 }
 
 form button[name="eliminar_comentario"]:hover {
-    background-color: #a32c2c;
+    background-color: #e60000;
 }
 
 .save-button {
@@ -285,8 +285,18 @@ form button[name="eliminar_comentario"]:hover {
     background-color: #b89d8700;
 }
 
+.mensaje {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #4CAF50;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 5px;
+    font-size: 14px;
+}
 
-#mensaje-style {
+
+#mensaje-calificacion {
     position: fixed; /* Fija el mensaje en la pantalla */
     top: 10px; /* Espaciado desde la parte superior */
     left: 50%; /* Posiciona horizontalmente al 50% */
@@ -298,8 +308,38 @@ form button[name="eliminar_comentario"]:hover {
     color: #a17157;
     font-size: 18px;
     font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000; /* Para que quede encima */
+}
+
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.delete-button:hover {
+    background-color: #e60000;
+}
+
+table {
+    margin: 20px 0;
+    border: 1px solid #a17157;
+    width: 100%;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #c68c6c;
+}
+
+th {
+    background-color: #f1e3d8;
 }
 
 footer {

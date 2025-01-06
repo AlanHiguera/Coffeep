@@ -85,7 +85,7 @@ html {
 /* Estilos generales para el contenedor */
 .filters {
     background-color: #f1e3d8; /* Fondo beige */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     height: 100%;
     border-radius: 10px;
@@ -225,7 +225,7 @@ html {
   .recipe-card {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
     height: 330px;
@@ -248,20 +248,6 @@ html {
     font-size: 18px;
     margin: 10px 0;
   }
-  
-  .recipe-card .rating {
-    margin: 0.5rem 0;
-    color: #ffd000;
-}
-  
-.recipe-card .tag {
-    font-size: 0.9rem;
-    color: #fff;
-    background-color: #c68c6c;
-    padding: 0.2rem 0.5rem;
-    border-radius: 8px;
-    display: inline-block;
-}
 
 .search-bar {
     display: flex;
@@ -289,6 +275,74 @@ html {
 
 .search-bar button:hover {
     background-color: #a17157;
+}
+
+
+.tag-circle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #c68c6c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+    height: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-content {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.ratings-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.rating {
+    margin-right: 40px;
+    display: inline-block;
+    font-size: 18px;
+    color: #ffb700;
+}
+
+.tag-circle {
+    margin-left: 40px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #c68c6c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.uploader {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 10px;
+    color: #3f3f3f;
 }
 
 footer {

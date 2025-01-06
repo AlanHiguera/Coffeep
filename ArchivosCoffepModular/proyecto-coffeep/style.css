@@ -1,61 +1,67 @@
 html {
   font-family: 'Montserrat', sans-serif;
+  height: 100%;
 }
 
 * { /* Reset */
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
     color: #252525;
     background-color: #f8f4f1;
-  }
-  
-  header nav {
+    display: flex;
+    flex-direction: column; /* Colocar header, main, y footer en una columna */
+    min-height: 100%; 
+    height: 100%;
+}
+
+header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #d3b8a4;
     padding: 30px 40px;
-  }
-  
-  header nav ul {
+}
+
+header nav ul {
     list-style: none;
     display: flex;
     gap: 20px;
-  }
-  
-  header nav ul li a {
+}
+
+header nav ul li a {
     text-decoration: none;
     color: #252525;
-  }
-  
-  header .icons {
+}
+
+header .icons {
     display: flex;
     gap: 15px;
-  }
-  
-  header .icons span {
+}
+
+header .icons span {
     width: 26px;
     height: 26px;
     background-color: #cfc0b400;
     border-radius: 50%;
     display: inline-block;
-  }
+}
 
-  nav li a:hover {
+nav li a:hover {
     text-decoration: underline;
-  }
+}
 
-  main {
+main {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: calc(200vh - 100px);
     padding: 20px;
   }
-  
+
   .form-container {
     display: flex;
     gap: 20px;
@@ -90,21 +96,6 @@ html {
     border: 1px solid #ccc;
     border-radius: 5px;
   }
-  #mensaje-calificacion {
-    position: fixed; /* Fija el mensaje en la pantalla */
-    top: 10px; /* Espaciado desde la parte superior */
-    left: 50%; /* Posiciona horizontalmente al 50% */
-    transform: translateX(-50%); /* Centra horizontalmente */
-    padding: 15px;
-    background-color: #f8e8d8;
-    border: 2px solid #d6b8a9;
-    border-radius: 10px;
-    color: #a17157;
-    font-size: 18px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Para que quede encima */
-}
   
   button {
     background-color: #b3876f;
@@ -127,7 +118,7 @@ html {
   }
   
   .form-content p a {
-    color: #b3876f;
+    color:  #9a705e;
     text-decoration: none;
   }
   
@@ -162,7 +153,7 @@ html {
   }
   
   .contact-content a {
-    color: #288ef4;
+    color: #3d95d9;
     text-decoration: none;
     font-weight: bold;
   }
@@ -199,6 +190,23 @@ html {
   .logo-container-form img {
     max-width: 200px;
     margin-bottom: 10px;
+  }
+
+  #mensaje-calificacion {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    background-color: #f8e8d8;
+    border: 2px solid #d6b8a9;
+    border-radius: 10px;
+    color: #a17157;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: center;
   }
   
   footer {

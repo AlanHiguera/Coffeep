@@ -11,13 +11,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
     $nombre = $_POST['nombre'];
 
-    // Consulta clásica para actualizar el nombre
-    $sql_update = "UPDATE tipo_ingrediente SET Tip_nombre = '$nombre' WHERE Tip_idtipo = $id";
+    // Imprimir datos recibidos para depuración (opcional)
+    error_log("ID recibido: $id");
+    error_log("Nombre recibido: $nombre");
 
-    if (mysqli_query($conn, $sql_update)) {
-        echo "Exitoso: El nombre ha sido actualizado.";
+    // Verificar que los datos no estén vacíos
+    if (empty($id) || empty($nombre)) {
+        echo "Error: Datos incompletos.";
+        exit();
+    }
+
+    // Consulta preparada para actualizar el nombre
+    $sql_update = "UPDATE tipo_ingrediente SET Tip_nombre = ? WHERE Tip_idtipo = ?";
+    $stmt = $conn->prepare($sql_update);
+
+    if ($stmt) {
+        $stmt->bind_param("si", $nombre, $id);
+
+        if ($stmt->execute()) {
+            echo "Exitoso: El nombre ha sido actualizado.";
+        } else {
+            echo "Error al actualizar: " . $stmt->error;
+        }
+
+        $stmt->close();
     } else {
-        echo "Error al actualizar: " . mysqli_error($conn);
+        echo "Error en la preparación de la consulta.";
     }
 
     $conn->close();

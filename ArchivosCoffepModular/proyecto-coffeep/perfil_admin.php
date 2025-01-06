@@ -44,25 +44,34 @@ if ($result->num_rows > 0) {
 <body>
 <body>
 <!-- Encabezado -->
-  <header>
+<header>
     <nav>
-      <ul>
-        <li><a href="mantenedor_ting.php">Mantenedor</a></li>
-        <li><a href="generar_listusu.php">Listado</a></li>
-      </ul>
-      <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="perfil_admin.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php else: ?>
-          <a href="registro.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php endif; ?>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
   
@@ -78,15 +87,14 @@ if ($result->num_rows > 0) {
         <h3><?php echo $_SESSION['user']; ?></h3>
         <p><?php echo $firstname; ?> <?php echo $lastname; ?> | <?php echo $age; ?> años</p>
         <p><?php echo $email; ?></p>
-        <a href="generar_listusu.php">Editar perfil</a>
       </div>
   
       <!-- Gestión de Tablas -->
       <div class="content">
         <h3>Gestión</h3>
-        <a href="mantenedor_ting.php"><button>Mantenedor Tabla básica</button></a>
-        <a href="generar_listusu.php"><button>Listado de Usuarios</button></a>
-        <a href="cerrar_sesion.php"><button>Cerrar Sesión</button></a>
+        <a href="mantenedor_ting.php"><button><b>Mantenedor de tabla básica</b></button></a>
+        <a href="generar_listusu.php"><button><b>Listado de usuarios</b></button></a>
+        <a href="cerrar_sesion.php"><button><b>Cerrar sesión</b></button></a>
       </div>
     </div>
   </main>

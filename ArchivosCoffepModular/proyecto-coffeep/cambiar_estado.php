@@ -1,14 +1,19 @@
 <?php
+// Depuración de la sesión
 // Conexión a la base de datos
-include "conexion.php";
+
 session_start();
+include "conexion.php";
+// Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['user'])) {
     header("Location: iniciar_sesion.php"); // Redirige al inicio de sesión si no está autenticado
     exit();
 }
 
+// Recuperar el rol del usuario desde la sesión
+$rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : null;
 
-// Verificar si se ha pasado el nickname del usuario
+// Verificar si se ha proporcionado el nickname del usuario
 if (isset($_GET['nickname'])) {
     $nickname = $_GET['nickname'];
 
@@ -27,11 +32,7 @@ if (isset($_GET['nickname'])) {
             $estado = $row['Usu_estado'];
 
             // Alternar el estado
-            if ($estado == 'activo') {
-                $nuevo_estado = 'inactivo';
-            } else {
-                $nuevo_estado = 'activo';
-            }
+            $nuevo_estado = ($estado === 'Activo') ? 'Inactivo' : 'Activo';
 
             // Consulta SQL para actualizar el estado del usuario
             $sql_update = "UPDATE usuario SET Usu_estado = '$nuevo_estado' WHERE Usu_nickname = '$nickname'";
@@ -44,8 +45,9 @@ if (isset($_GET['nickname'])) {
                 } else {
                     header("Location: editar_perfil.php?msg=Estado cambiado a $nuevo_estado");
                 }
+                exit();
             } else {
-                echo "Error al cambiar el estado del usuario.";
+                echo "Error al cambiar el estado del usuario: " . $conn->error;
             }
         } else {
             echo "Usuario no encontrado.";

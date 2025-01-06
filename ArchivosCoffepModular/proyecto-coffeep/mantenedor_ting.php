@@ -20,38 +20,42 @@ if (!isset($_SESSION['user'])) {
 </head>
 <body>
 <!-- Encabezado -->
-  <header>
+<header>
     <nav>
-      <ul>
-        <li><a href="mantenedor_ting.php">Mantenedor</a></li>
-        <li><a href="generar_listusu.php">Listado</a></li>
-      </ul>
-      <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="perfil_admin.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;">
-          </a>
-        <?php else: ?>
-          <a href="registro.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;">
-          </a>
-        <?php endif; ?>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
 
 <main>
     <div class="container">
-        <div class="sidebar">
-            <h3>Gestión</h3>
-            <a href="generar_listusu.php"><button class="sidebar-button">Listado Usuarios</button></a>
-            <button class="sidebar-button">Tipo de ingrediente</button>
-        </div>
-
         <div class="content">
             <div class="table-container">
+                <h3>Mantener tipo de ingrediente</h3>
                 <?php
                 include 'conexion.php';
                 // Consulta SQL
@@ -65,7 +69,7 @@ if (!isset($_SESSION['user'])) {
                 echo '<th>ID</th>';
                 echo '<th>Nombre</th>';
                 echo '<th>Editar</th>';
-                echo '<th>Gestión</th>';
+                echo '<th>Eliminar</th>';
                 echo '</tr>';
                 echo '</thead>';
                 echo '<tbody>';
@@ -79,7 +83,7 @@ if (!isset($_SESSION['user'])) {
                         echo '<td>
                                 <button class="editar" onclick="mostrarFormulario(\'' . $row["Tip_idtipo"] . '\')">Editar</button>
                               </td>';
-                        echo '<td><a href="eliminar_ting.php?id=' . urlencode($row["Tip_idtipo"]) . '" style="color: red; text-decoration: none;" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este registro?\')">Eliminar</a></td>';
+                        echo '<td><a href="eliminar_ting.php?id=' . urlencode($row["Tip_idtipo"]) . '" style="color:#ff4d4d; text-decoration: none;" onclick="return confirm(\'¿Estás seguro de que deseas eliminar este registro?\')">Eliminar</a></td>';
                         echo '</tr>';
                     }
                 } else {
@@ -103,7 +107,7 @@ if (!isset($_SESSION['user'])) {
                     <p id="edit-mensaje" style="margin-top: 10px; font-weight: bold;"></p>
                 </div>
                 
-                <!-- Formulario para agregar -->
+                <!-- Formulario para agregar (sin cambios) -->
                 <div id="formulario">
                     <form name="nombre" method="POST" action="agregar_ting.php" onsubmit="return procesarFormulario(event);">
                         <label for="nombre">Nombre del ingrediente:</label>
@@ -119,9 +123,7 @@ if (!isset($_SESSION['user'])) {
 <!-- Pie de página -->
 <footer>
     <p>Coffee-P &copy; Todos los derechos reservados.</p>
-</footer>
-
-<!-- Enlace al archivo externo de JavaScript -->
-<script src="scripts.js"></script>
+  </footer>
 </body>
+<script src="script.js"></script>
 </html>

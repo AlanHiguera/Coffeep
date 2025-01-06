@@ -19,17 +19,16 @@ if (!isset($_SESSION['user'])) {
   <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-  <!-- Encabezado -->
-  <header>
+<!-- Encabezado -->
+<header>
     <nav>
         <ul>
             <li><a href="inicio.php">Inicio</a></li>
             <li><a href="contacto.php">Contacto</a></li>
-            <li><a href="guia.php">Infromación</a></li>
+            <li><a href="guia.php">Información</a></li>
         </ul>
         <div class="icons">
             <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
-            <span class="user">
             <?php 
             if (isset($_SESSION['user'])): 
                 // Verificar el rol y ajustar el enlace
@@ -54,13 +53,13 @@ if (!isset($_SESSION['user'])) {
 
   <div class="container">
     <div class="table-container">
-      <h2>Lista de Usuarios</h2>
+      <h2>Editar perfil de usuario</h2>
         <tbody>
         <?php
         // Conexión a la base de datos
         include "conexion.php";
 
-        // Obtener los usuarios desde la funció
+        // Obtener los usuarios desde la funcionó
         
         echo "<table>";
         echo "<thead>";
@@ -71,8 +70,6 @@ if (!isset($_SESSION['user'])) {
         echo "<th>Nombre</th>";
         echo "<th>Apellido</th>";
         echo "<th>Rol</th>";
-        echo "<th>Estado</th>";
-        echo "<th>Cambiar estado</th>";
         echo "<th>Editar datos</th>";
         echo "</tr>";
         echo "</thead>";
@@ -81,9 +78,7 @@ if (!isset($_SESSION['user'])) {
         $nickname = $conn->real_escape_string($_SESSION['user']); // Escapar el valor por seguridad
 
         // Consulta SQL para obtener los datos del usuario autenticado
-        $sql_check = "SELECT Usu_nickname, Usu_correo, Usu_nombre, Usu_apellido, Usu_rol, Usu_estado, Usu_foto
-                      FROM usuario 
-                      WHERE Usu_nickname = '$nickname'";
+        $sql_check = "SELECT Usu_nickname, Usu_correo, Usu_nombre, Usu_apellido, Usu_rol, Usu_estado, Usu_foto FROM usuario WHERE Usu_nickname = '$nickname'";
 
         $usuarios = $conn->query($sql_check);
         if ($usuarios->num_rows > 0){
@@ -100,14 +95,10 @@ if (!isset($_SESSION['user'])) {
                 echo "<td>" . htmlspecialchars($row['Usu_nombre']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['Usu_apellido']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['Usu_rol']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['Usu_estado']) . "</td>";
-            
-                // Enlace para cambiar el estado
-                echo "<td><a class='change-status' href='cambiar_estado.php?nickname=" . htmlspecialchars($row['Usu_nickname']) . "'>Cambiar estado</a></td>";
             
                 // Formulario para editar datos
                 echo "<td>";
-                echo "<form action='editar_usuario.php' method='POST' enctype='multipart/form-data' class='edit-form' style='display: flex; flex-direction: column; gap: 10px; align-items: flex-start;'>"; // Flexbox para mejor alineación
+                echo "<form action='editar_listusu.php' method='POST' enctype='multipart/form-data' class='edit-form' style='display: flex; flex-direction: column; gap: 10px; align-items: flex-start;'>"; // Flexbox para mejor alineación
                 echo "<input type='hidden' name='nickname' value='" . htmlspecialchars($row['Usu_nickname']) . "'>";
     
                 // Estilizando los campos

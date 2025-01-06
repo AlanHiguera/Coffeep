@@ -24,25 +24,32 @@ if (!isset($_SESSION['user'])) {
 <!-- Encabezado -->
 <header>
     <nav>
-      <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-        <li><a href="guia.php">Información</a></li>
-      </ul>
-      <div class="icons">
-        <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="miperfil.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php else: ?>
-          <a href="registro.html">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php endif; ?>
-        </span>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
 

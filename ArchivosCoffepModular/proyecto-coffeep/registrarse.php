@@ -10,6 +10,10 @@ $nombre = $_POST["firstname"];
 $apellido = $_POST["lastname"];
 $email = $_POST["email"];
 
+// Ruta de la foto por defecto
+$foto_default = 'images/user.png';
+$foto_binaria = addslashes(file_get_contents($foto_default));;
+
 // Encriptar la contraseña
 //$password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
@@ -21,8 +25,8 @@ if ($result->num_rows > 0) {
     echo "Error: El usuario o correo ya existe.";
 } else {
     // Insertar datos en la base de datos si no existe
-    $sql_insert = "INSERT INTO usuario (Usu_nickname, Usu_contraseña, Usu_nombre, Usu_apellido, Usu_correo, Usu_edad, Usu_rol) 
-                   VALUES ('$nickname', '$password', '$nombre', '$apellido', '$email', '$edad', 'Administrador')";
+    $sql_insert = "INSERT INTO usuario (Usu_foto, Usu_nickname, Usu_contraseña, Usu_nombre, Usu_apellido, Usu_correo, Usu_edad, Usu_rol) 
+                   VALUES ('$foto_binaria', '$nickname', '$password', '$nombre', '$apellido', '$email', '$edad', 'Usuario')";
 
     if ($conn->query($sql_insert) === TRUE) {
         echo "Registro guardado correctamente.";

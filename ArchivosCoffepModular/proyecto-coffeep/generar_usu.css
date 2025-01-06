@@ -53,12 +53,17 @@ header .icons span {
 nav li a:hover {
     text-decoration: underline;
 }
+
 main {
-    flex: 1; /* Ocupa todo el espacio restante entre el encabezado y el pie de página */
-    padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(200vh - 100px);
+  padding: 20px;
 }
 
 .container {
+  flex: 1;
   padding: 20px;
 }
 
@@ -69,7 +74,7 @@ main {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   gap: 20px;
 }
 
@@ -98,24 +103,18 @@ td a {
   font-weight: bold;
 }
 
-td a.edit {
-  color: #1a73e8;
-}
+a.change-status { color: #ff4d4d; } /* Globally */
 
-td a.delete {
-  color: #b33030;
-}
+/* Each state */
+a.change-status:visited { text-decoration: none; color: #ff4d4d; }
+a.change-status:hover { text-decoration: none; color: #ff4d4d; }
+a.change-status:focus { text-decoration: none; color: #ff4d4d; }
+a.change-status:hover, a.change-status:active { text-decoration: none; color: #ff4d4d; }
+
 
 footer {
   text-align: center;
   background-color: #d3b8a4;
   padding: 20px;
   font-size: 14px;
-}
-.edit-form input[type="file"] {
-  margin-top: 10px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 90%;
 }

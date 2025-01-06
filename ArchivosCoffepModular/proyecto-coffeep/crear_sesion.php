@@ -16,6 +16,8 @@ if ($result->num_rows > 0) {
     $_SESSION['email'] = $row['Usu_correo'];
     $_SESSION['firstname'] = $row['Usu_nombre'];
     $_SESSION['lastname'] = $row['Usu_apellido'];
+    $_SESSION['rol'] = $row['Usu_rol'];
+    $_SESSION['foto'] = $row['Usu_foto'];
 
     if ($row['Usu_contraseña'] === $password) {
         if (trim($row['Usu_rol']) === 'Administrador') {

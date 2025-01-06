@@ -21,7 +21,6 @@
       </ul>
       <div class="icons">
           <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
-          <span class="user">
           <?php 
           if (isset($_SESSION['user'])): 
               // Verificar el rol y ajustar el enlace

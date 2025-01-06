@@ -16,9 +16,7 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Construir la consulta principal
 $sql = "SELECT Rec_idrec, Rec_nombre, Rec_foto, Rec_calificacion, Rec_clasificacion, Rec_nickname 
-        FROM receta R, usuario U 
-        WHERE R.Rec_nickname = U.Usu_nickname AND U.Usu_estado = 'activo'
-        ";
+        FROM receta";
 
 // Añadir joins para ingredientes y tipos de grano si se seleccionan filtros
 $joins = [];
@@ -41,17 +39,11 @@ if (!empty($selectedGrainTypes)) {
     $where[] = "Gra_idgrano IN ($grainTypeIds)";
 }
 
-// Filtro por método
-if (!empty($selectedMethods)) {
-    $methods = "'" . implode("','", $selectedMethods) . "'";
-    $where[] = "Rec_metodo IN ($methods)";
-}
-
 // Filtro por búsqueda de nombre
 if (!empty($search)) {
     // Normaliza el texto a minúsculas para que no sea sensible a mayúsculas
     $search = strtolower($conn->real_escape_string($search));
-    $where[] = "LOWER(Rec_nombre) LIKE '%$search%'";
+    $where[] = "LOWER(Rec_nombre) LIKE '%$search%' OR LOWER(Rec_nickname) LIKE '%$search%'";
 }
 
 // Añadir joins y condiciones a la consulta

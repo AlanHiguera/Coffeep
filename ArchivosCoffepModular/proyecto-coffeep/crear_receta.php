@@ -22,25 +22,37 @@ $mostrarMensaje = false;
     <link rel="stylesheet" href="crear_receta.css">
     <link rel="icon" href="images/favicon.png">
 </head>
-<body>
-    <!-- Encabezado -->
-    <header>
-        <nav>
-            <ul>
-                <li><a href="inicio.php">Inicio</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="guia.php">Información</a></li>
-            </ul>
-            <div class="icons">
-                <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
-                <span class="user">
-                    <a href="perfil_admin.html">
-                        <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;">
+<!-- Encabezado -->
+<header>
+    <nav>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
                     </a>
-                </span>
-            </div>
-        </nav>
-    </header>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
+    </nav>
+  </header>
 
     <!-- Contenido principal -->
     <main>
@@ -53,11 +65,12 @@ $mostrarMensaje = false;
 
                 <form action="publicar_receta.php" method="POST" enctype="multipart/form-data">
                     <?php
-                    if (isset($_SESSION['mensaje'])) {
-                        echo '<div id="mensaje-style">' . $_SESSION['mensaje'] . '</div>';
-                        unset($_SESSION['mensaje']); // Elimina el mensaje después de mostrarlo
-                    }
+                        if (isset($_SESSION['mensaje'])) {
+                            echo '<div id="mensaje-style">' . $_SESSION['mensaje'] . '</div>';
+                            unset($_SESSION['mensaje']); // Elimina el mensaje después de mostrarlo
+                        }
                     ?>
+                    
                     <!-- Nombre de la receta -->
                     <div class="form-group">
                         <label for="rec_nombre">Nombre de la receta:</label>
@@ -103,12 +116,13 @@ $mostrarMensaje = false;
             
                     <!-- Restricción de edad -->
                     <div class="form-group age-restriction">
-                        <input type="checkbox" id="rec_clasificacion" name="rec_clasificacion" value="+18">
+                        <input type="checkbox" id="rec_clasificacion" name="rec_clasificacion" value="ATP">
                         <label for="rec_clasificacion">Restricción de edad</label>
                     </div>
 
                     <!-- Botón de enviar -->
                     <button type="submit" class="btn-primary">Publicar Receta</button>
+                    
                     <?php
                         $mostrarMensaje = true;
                     ?>
@@ -121,7 +135,6 @@ $mostrarMensaje = false;
                     <div class ="form-content" id="foto-cuadro">
                         <h2>Añadir foto</h2>
                         <div id="foto-container">
-                            <span id="foto-texto">Añadir foto</span>
                             <img id="foto-preview" src="#" alt="Vista previa de la foto">
                         </div>
 
@@ -143,12 +156,25 @@ $mostrarMensaje = false;
     </footer>
 
     <script>
-        document.getElementById('rec_foto').addEventListener('change', function(event) {
-            const [file] = event.target.files;
-            if (file) {
-                const preview = document.getElementById('foto-preview');
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = 'block';
+        // Script para agregar y eliminar ingredientes dinámicamente
+        document.getElementById('add-ingrediente').addEventListener('click', function() {
+                    var container = document.getElementById('ingredientes-container');
+                    var newIngrediente = document.createElement('div');
+                    newIngrediente.classList.add('ingrediente');
+                    newIngrediente.innerHTML = `
+                        <select name="ingredientes[]" required>
+                            <option value="">-- Selecciona un ingrediente --</option>
+                            <?php include 'obtener_ingredientes.php'; ?>
+                        </select>
+                        <input type="text" name="cantidades[]" placeholder="Cantidad (ej. 200g)" required>
+                        <button type="button" class="remove-ingrediente">Eliminar</button>
+                    `;
+                    container.appendChild(newIngrediente);
+                });
+
+                document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-ingrediente')) {
+                e.target.parentElement.remove();
             }
         });
 
@@ -160,6 +186,15 @@ $mostrarMensaje = false;
                     mensaje.style.opacity = "0"; // Desvanecer
                     setTimeout(() => mensaje.remove(), 500); // Eliminar después de 0.5 segundos
                 }, 2000); // Esperar 3 segundos
+            }
+        });
+
+        document.getElementById('rec_foto').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const preview = document.getElementById('foto-preview');
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
             }
         });
     </script>

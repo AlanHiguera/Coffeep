@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Actualizar receta con valores nutricionales totales
             $sql_update = "UPDATE receta SET Rec_grasas = ?, Rec_proteinas = ?, Rec_hidratos = ?, Rec_azucares = ?, Rec_sodio = ?, Rec_colesterol = ? 
                            WHERE Rec_idrec = ?";
+                           
             $stmt_update = $conn->prepare($sql_update);
             if (!$stmt_update) {
                 die("Error al preparar consulta de actualización: " . $conn->error);
@@ -108,10 +109,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         die("Error en la consulta: " . $stmt->error);
     }
-    session_start();
+
     $_SESSION['mensaje'] = "¡Tu receta ha sido creada! ☕✨";
     header("Location: crear_receta.php");
     exit();
+
     $stmt->close();
     $conn->close();
 }

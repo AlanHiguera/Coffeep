@@ -1,13 +1,87 @@
-<?php 
-include 'recetas_inicio.php'; 
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: iniciar_sesion.php");
+    exit();
+}
+
+include 'conexion.php';
+
+// Obtener el ID del usuario logueado desde la sesión
+$userId = $_SESSION['user']; // Asegúrate de que el ID del usuario está almacenado en la sesión
+
+// Obtener filtros seleccionados
+$isRankingChecked = isset($_GET['ranking']) && $_GET['ranking'] == '1';
+$selectedIngredients = isset($_GET['ingredients']) ? $_GET['ingredients'] : [];
+$selectedGrainTypes = isset($_GET['grainTypes']) ? $_GET['grainTypes'] : [];
+$selectedMethods = isset($_GET['methods']) ? $_GET['methods'] : [];
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Construir la consulta principal
+$sql = "SELECT Rec_idrec, Rec_nombre, Rec_foto, Rec_calificacion, Rec_clasificacion, Rec_nickname 
+        FROM receta 
+        JOIN guardado ON Rec_idrec = Gua_idrec
+        WHERE Gua_nickname = '$userId'";
+
+// Añadir filtros adicionales
+$where = [];
+$having = [];
+
+// Filtro por ingredientes
+if (!empty($selectedIngredients)) {
+    $ingredientCount = count($selectedIngredients);
+    $ingredientIds = implode(',', $selectedIngredients);
+    $sql .= " JOIN cantidad_ingrediente ON Rec_idrec = Can_idrec";
+    $where[] = "Can_iding IN ($ingredientIds)";
+    $having[] = "COUNT(DISTINCT Can_iding) = $ingredientCount";
+}
+
+// Filtro por tipos de grano
+if (!empty($selectedGrainTypes)) {
+    $grainTypeIds = implode(',', $selectedGrainTypes);
+    $sql .= " JOIN grano ON Rec_idgrano = Gra_idgrano";
+    $where[] = "Gra_idgrano IN ($grainTypeIds)";
+}
+
+// Filtro por método
+if (!empty($selectedMethods)) {
+    $methods = "'" . implode("','", $selectedMethods) . "'";
+    $where[] = "Rec_metodo IN ($methods)";
+}
+
+// Filtro por búsqueda de nombre
+if (!empty($search)) {
+    // Normaliza el texto a minúsculas para que no sea sensible a mayúsculas
+    $search = strtolower($conn->real_escape_string($search));
+    $where[] = "LOWER(Rec_nombre) LIKE '%$search%'";
+}
+
+// Añadir condiciones WHERE si hay filtros
+if (!empty($where)) {
+    $sql .= " AND " . implode(" AND ", $where);
+}
+
+// Añadir cláusula HAVING si se filtró por ingredientes
+if (!empty($having)) {
+    $sql .= " GROUP BY Rec_idrec HAVING " . implode(" AND ", $having);
+}
+
+// Ordenar por ranking si se seleccionó
+if ($isRankingChecked) {
+    $sql .= " ORDER BY Rec_calificacion DESC";
+}
+
+// Ejecutar la consulta
+$result = $conn->query($sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio - Coffee-P</title>
+  <title>Mis recetas - Coffee-P</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -55,7 +129,7 @@ include 'recetas_inicio.php';
             <form method="GET" action="">
                 <!-- Barra de búsqueda -->
                 <div class="search-bar">
-                    <input type="text" name="search" placeholder="Buscar receta o usuario..." value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
+                    <input type="text" name="search" placeholder="Buscar receta..." value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
                     <button type="submit"><b>Buscar</b></button>
                 </div>
                 <div class="filters">

@@ -19,26 +19,35 @@ if (!isset($_SESSION['user'])) {
   <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-  <!-- Encabezado -->
-  <header>
+<!-- Encabezado -->
+<header>
     <nav>
-      <ul>
-        <li><a href="inicio.php">Inicio</a></li>
-        <li><a href="contacto.php">Contacto</a></li>
-      </ul>
-      <div class="icons">
-      <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></a></span>
-        <span class="user">
-        <?php if (isset($_SESSION['user'])): ?>
-          <a href="perfil_admin.php">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php else: ?>
-          <a href="registro.html">
-            <img src="images/user.png" alt="Inicio" style="width: 40px; height: 40px;"></a>
-          </a>
-        <?php endif; ?>
-      </div>
+        <ul>
+            <li><a href="inicio.php">Inicio</a></li>
+            <li><a href="contacto.php">Contacto</a></li>
+            <li><a href="guia.php">Información</a></li>
+        </ul>
+        <div class="icons">
+            <span class="bell"><img src="images/bell.png" style="width: 40px; height: 40px;"></span>
+            <?php 
+            if (isset($_SESSION['user'])): 
+                // Verificar el rol y ajustar el enlace
+                if (isset($_SESSION['rol']) && trim($_SESSION['rol']) === 'Administrador'): ?>
+                    <a href="perfil_admin.php">
+                        <img src="images/user.png" alt="Perfil Admin" style="width: 40px; height: 40px;">
+                    </a>
+                <?php else: ?>
+                    <a href="miperfil.php">
+                        <img src="images/user.png" alt="Mi Perfil" style="width: 40px; height: 40px;">
+                    </a>
+                <?php endif; ?>
+            <?php else: ?>
+                <a href="registro.php">
+                    <img src="images/user.png" alt="Registrarse" style="width: 40px; height: 40px;">
+                </a>
+            <?php endif; ?>
+            </span>
+        </div>
     </nav>
   </header>
 
@@ -58,14 +67,12 @@ if (!isset($_SESSION['user'])) {
         echo "<th>Nombre</th>";
         echo "<th>Apellido</th>";
         echo "<th>Rol</th>";
-        echo "<th>Estado</th>";
-        echo "<th>Cambiar estado</th>";
         echo "<th>Editar datos</th>";
         echo "</tr>";
         echo "</thead>";
         echo "<tbody>";
         // Obtener los usuarios desde la función
-        $sql_check = "SELECT * FROM usuario";
+        $sql_check = "SELECT * FROM usuario ORDER BY Usu_rol ASC";
         $usuarios = $conn->query($sql_check);
         
         
@@ -86,14 +93,11 @@ if (!isset($_SESSION['user'])) {
             echo "<td>" . htmlspecialchars($row['Usu_nombre']) . "</td>";
             echo "<td>" . htmlspecialchars($row['Usu_apellido']) . "</td>";
             echo "<td>" . htmlspecialchars($row['Usu_rol']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['Usu_estado']) . "</td>";
         
-            // Enlace para cambiar el estado
-            echo "<td><a class='change-status' href='cambiar_estado.php?nickname=" . htmlspecialchars($row['Usu_nickname']) . "'>Cambiar estado</a></td>";
-        
+            
             // Formulario para editar datos
             echo "<td>";
-            echo "<form action='editar_usuario.php' method='POST' enctype='multipart/form-data' class='edit-form' style='display: flex; flex-direction: column; gap: 10px; align-items: flex-start;'>"; // Flexbox para mejor alineación
+            echo "<form action='editar_listusu.php' method='POST' enctype='multipart/form-data' class='edit-form' style='display: flex; flex-direction: column; gap: 10px; align-items: flex-start;'>"; // Flexbox para mejor alineación
             echo "<input type='hidden' name='nickname' value='" . htmlspecialchars($row['Usu_nickname']) . "'>";
 
             // Estilizando los campos
@@ -115,6 +119,11 @@ if (!isset($_SESSION['user'])) {
             echo "<div class='form-group' style='width: 100%;'>";
             echo "<label for='foto' style='font-weight: bold;'>Actualizar foto:</label>";
             echo "<input type='file' id='foto' name='foto' accept='image/*' style='padding: 5px;'>";
+            echo "</div>";
+
+            // Enlace para cambiar el estado
+            echo "<div class='form-group' style='width: 100%;'>";
+            echo "<label style='font-weight: bold;'><a class='change-status' href='cambiar_estado.php?nickname=" . htmlspecialchars($row['Usu_nickname']) . "'>Cambiar estado: " . htmlspecialchars($row['Usu_estado']) . "</a></label>";
             echo "</div>";
 
             // Botón estilizado

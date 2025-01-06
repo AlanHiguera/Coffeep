@@ -58,16 +58,16 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 100px);
+  height: calc(200vh - 100px);
   padding: 20px;
 }
 
   .accordion-container {
-    max-width: 600px;
+    width: 100%;
     margin: 10px;
     background-color: #f7e9e3;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
   }
 
