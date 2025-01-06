@@ -90,6 +90,15 @@ label {
   display: block;
 }
 
+label2 {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 0px;
+  display: block;
+  margin-right: 500px;
+  white-space: nowrap;
+}
+
 input, textarea, select {
   width: 100%;
   padding: 10px;
@@ -244,3 +253,5 @@ footer {
     padding: 20px;
     font-size: 14px;
   }
+
+  

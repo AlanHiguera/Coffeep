@@ -102,10 +102,10 @@ $mostrarMensaje = false;
                                     <?php include 'obtener_ingredientes.php'; ?>
                                 </select>
                                 <input type="text" name="cantidades[]" placeholder="Cantidad (ej. 200g)" required>
-                                <button type="button" class="remove-ingrediente">Eliminar</button>
+                                <button type="button" class="remove-ingrediente" style="margin-bottom: 15px;">Eliminar</button>
                             </div>
                         </div>
-                        <button type="button" id="add-ingrediente" class="btn-secondary">Agregar ingrediente</button>
+                        <button type="button" id="add-ingrediente" class="btn-secondary" style="margin-bottom: 10px;">Agregar ingrediente</button>
                     </div>
 
                     <!-- Método -->
@@ -115,9 +115,9 @@ $mostrarMensaje = false;
                     </div>
             
                     <!-- Restricción de edad -->
-                    <div class="form-group age-restriction">
-                        <input type="checkbox" id="rec_clasificacion" name="rec_clasificacion" value="ATP">
-                        <label for="rec_clasificacion">Restricción de edad</label>
+                    <div class="form-group age-restriction" style="display: flex; align-items: center;">
+                        <input type="checkbox" id="rec_clasificacion" name="rec_clasificacion" value="ATP" style="margin-right: 0px;">
+                        <label2 style="white-space: nowrap; margin-bottom: 15px;"for="rec_clasificacion" > Restricción de edad</label2>
                     </div>
 
                     <!-- Botón de enviar -->
@@ -132,12 +132,11 @@ $mostrarMensaje = false;
                     </p> 
         </div>
                     <!-- Contenedor de la foto aparte -->
-                    <div class ="form-content" id="foto-cuadro">
+                    <div class="form-content" id="foto-cuadro">
                         <h2>Añadir foto</h2>
-                        <div id="foto-container">
-                            <img id="foto-preview" src="#" alt="Vista previa de la foto">
+                        <div id="foto-container" style="position: relative;">
+                            <img id="foto-preview" src="#" alt="Vista previa de la foto" style="display: none; max-width: 100%; max-height: 100%; position: absolute; top: 0; left: 0;">
                         </div>
-
                         <input type="file" id="rec_foto" name="rec_foto" accept="image/*" style="padding: none;" required>
                         <p class="nota-foto">
                             *Ante cualquier imagen que incumpla las normas, corres el riesgo de perder tu cuenta.
@@ -167,7 +166,7 @@ $mostrarMensaje = false;
                             <?php include 'obtener_ingredientes.php'; ?>
                         </select>
                         <input type="text" name="cantidades[]" placeholder="Cantidad (ej. 200g)" required>
-                        <button type="button" class="remove-ingrediente">Eliminar</button>
+                        <button type="button" class="remove-ingrediente" style="margin-bottom: 15px;">Eliminar</button>
                     `;
                     container.appendChild(newIngrediente);
                 });
