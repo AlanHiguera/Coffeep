@@ -98,32 +98,37 @@ if (isset($_GET['id'])) {
             $comentarios[] = $comentario;
         }
     }
-
+    $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : null;
     // Manejar el guardado o desguardado de la receta
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_receta'])) {
-        $idReceta = intval($_POST['guardar_receta']);
-        $usuario = $_SESSION['user']; // Usuario autenticado
+        if($rol === 'usuario'){
+            $idReceta = intval($_POST['guardar_receta']);
+            $usuario = $_SESSION['user']; // Usuario autenticado
 
-        // Verificar si la receta ya está guardada
-        $sqlVerificarGuardado = "SELECT * FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
-        $resultadoVerificar = $conn->query($sqlVerificarGuardado);
+            // Verificar si la receta ya está guardada
+            $sqlVerificarGuardado = "SELECT * FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
+            $resultadoVerificar = $conn->query($sqlVerificarGuardado);
 
-        if ($resultadoVerificar->num_rows > 0) {
-            // Si está guardada, eliminarla (desguardar)
-            $sqlDesguardar = "DELETE FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
-            if ($conn->query($sqlDesguardar)) {
-                $mensajeGuardar = "Receta eliminada de tus guardados.";
+            if ($resultadoVerificar->num_rows > 0) {
+                // Si está guardada, eliminarla (desguardar)
+                $sqlDesguardar = "DELETE FROM guardado WHERE Gua_nickname = '$usuario' AND Gua_idrec = $idReceta";
+                if ($conn->query($sqlDesguardar)) {
+                    $mensajeGuardar = "Receta eliminada de tus guardados.";
+                } else {
+                    $mensajeGuardar = "Hubo un error al intentar desguardar la receta.";
+                }
             } else {
-                $mensajeGuardar = "Hubo un error al intentar desguardar la receta.";
+                // Si no está guardada, agregarla
+                $sqlGuardar = "INSERT INTO guardado (Gua_nickname, Gua_idrec) VALUES ('$usuario', $idReceta)";
+                if ($conn->query($sqlGuardar)) {
+                    $mensajeGuardar = "¡Receta guardada correctamente!☕✨";
+                } else {
+                    $mensajeGuardar = "Hubo un error al guardar la receta.";
+                }
             }
-        } else {
-            // Si no está guardada, agregarla
-            $sqlGuardar = "INSERT INTO guardado (Gua_nickname, Gua_idrec) VALUES ('$usuario', $idReceta)";
-            if ($conn->query($sqlGuardar)) {
-                $mensajeGuardar = "¡Receta guardada correctamente!☕✨";
-            } else {
-                $mensajeGuardar = "Hubo un error al guardar la receta.";
-            }
+        }
+        else if($rol === 'Administrador'){
+            $mensajeGuardar = "Un administrador no guarda recetas.";
         }
     }
 
@@ -141,35 +146,39 @@ $mostrarMensaje = false;
 
 // Manejar el envío de la calificación
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calificacion'])) {
-    $calificacion = floatval($_POST['calificacion']);
-    $usuario = $_SESSION['user']; // Suponiendo que el usuario está autenticado y su nickname está en la sesión
-    $idReceta = $id;
+    if($rol === 'usuario'){
+        $calificacion = floatval($_POST['calificacion']);
+        $usuario = $_SESSION['user']; // Suponiendo que el usuario está autenticado y su nickname está en la sesión
+        $idReceta = $id;
 
-    // Verificar si el usuario ya calificó esta receta
-    $sqlVerificar = "SELECT * FROM evaluacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
-    $resultadoVerificar = $conn->query($sqlVerificar);
+        // Verificar si el usuario ya calificó esta receta
+        $sqlVerificar = "SELECT * FROM evaluacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
+        $resultadoVerificar = $conn->query($sqlVerificar);
 
-    if ($resultadoVerificar->num_rows > 0) {
-        // Actualizar calificación existente
-        $sqlActualizar = "UPDATE evaluacion SET Eva_calificacion = $calificacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
-        $conn->query($sqlActualizar);
-    } else {
-        // Insertar nueva calificación
-        $sqlInsertar = "INSERT INTO evaluacion (Eva_nickname, Eva_idrec, Eva_calificacion, Eva_fecha) VALUES ('$usuario', $idReceta, $calificacion, NOW())";
-        $conn->query($sqlInsertar);
+        if ($resultadoVerificar->num_rows > 0) {
+            // Actualizar calificación existente
+            $sqlActualizar = "UPDATE evaluacion SET Eva_calificacion = $calificacion WHERE Eva_nickname = '$usuario' AND Eva_idrec = $idReceta";
+            $conn->query($sqlActualizar);
+        } else {
+            // Insertar nueva calificación
+            $sqlInsertar = "INSERT INTO evaluacion (Eva_nickname, Eva_idrec, Eva_calificacion, Eva_fecha) VALUES ('$usuario', $idReceta, $calificacion, NOW())";
+            $conn->query($sqlInsertar);
+        }
+
+        // Actualizar calificación promedio de la receta
+        $sqlPromedio = "SELECT AVG(Eva_calificacion) AS promedio FROM evaluacion WHERE Eva_idrec = $idReceta";
+        $resultadoPromedio = $conn->query($sqlPromedio);
+        if ($resultadoPromedio && $rowPromedio = $resultadoPromedio->fetch_assoc()) {
+            $calificacionPromedio = $rowPromedio['promedio'];
+            $sqlActualizarReceta = "UPDATE receta SET Rec_calificacion = $calificacionPromedio WHERE Rec_idrec = $idReceta";
+            $conn->query($sqlActualizarReceta);
+        }
     }
-
-    // Actualizar calificación promedio de la receta
-    $sqlPromedio = "SELECT AVG(Eva_calificacion) AS promedio FROM evaluacion WHERE Eva_idrec = $idReceta";
-    $resultadoPromedio = $conn->query($sqlPromedio);
-    if ($resultadoPromedio && $rowPromedio = $resultadoPromedio->fetch_assoc()) {
-        $calificacionPromedio = $rowPromedio['promedio'];
-        $sqlActualizarReceta = "UPDATE receta SET Rec_calificacion = $calificacionPromedio WHERE Rec_idrec = $idReceta";
-        $conn->query($sqlActualizarReceta);
-    }
-
     // Activar el mensaje
-    $mostrarMensaje = true;
+    //$mostrarMensaje = true;
+    else if($rol === 'Administrador'){
+        $mensajeGuardar = "Un administrador no califica recetas.";
+    }
 }
 
 ?>
