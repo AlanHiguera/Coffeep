@@ -92,29 +92,37 @@ include 'conexion.php'; // Archivo para conectar a la base de datos
                         <label for="rec_metodo">Método:</label>
                         <input type="text" id="rec_metodo" name="rec_metodo" required placeholder="Ejemplo: Espresso">
                     </div>
-
+            
                     <!-- Restricción de edad -->
                     <div class="form-group age-restriction">
-                        <input type="checkbox" id="age_restriction" name="age_restriction">
-                        <label for="age_restriction">Restricción de edad</label>
+                        <input type="checkbox" id="rec_clasificacion" name="rec_clasificacion" value="+18">
+                        <label for="rec_clasificacion">Restricción de edad</label>
                     </div>
+
+                    <!-- Botón de enviar -->
                     <button type="submit" class="btn-primary">Publicar Receta</button>
+
+                    <p class="nota-foto">
+                    *Al publicar esta receta declaras que la información presente no contiene productos dañinos para la salud ni presenta uso de lenguaje inadecuado. Ante cualquier incumplimiento de normas, asumes total responsabilidad de lo presente en la publicación.
+                    </p> 
+        </div>
+                    <!-- Contenedor de la foto aparte -->
+                    <div class ="form-content" id="foto-cuadro">
+                        <h2>Añadir foto</h2>
+                        <div id="foto-container">
+                            <span id="foto-texto">Añadir foto</span>
+                            <img id="foto-preview" src="#" alt="Vista previa de la foto">
+                        </div>
+
+                        <input type="file" id="rec_foto" name="rec_foto" accept="image/*" style="padding: none;" required>
+                        <p class="nota-foto">
+                            *Ante cualquier imagen que incumpla las normas, corres el riesgo de perder tu cuenta.
+                        </p> 
+                    </div>
+
+                    
                 </form>
-            </div>
-
-            <!-- Contenedor para subir foto -->
-            <div class="form-content" id="foto-cuadro">
-                <h2>Añadir foto</h2>
-                <label for="rec_foto" id="foto-container">
-                    <span id="foto-texto">Añadir foto</span>
-                    <img id="foto-preview" style="display: none;" />
-                </label>
-                <input type="file" id="rec_foto" name="rec_foto" accept="image/*" style="display: none;" required>
-                <p class="nota-foto">
-                    *Ante cualquier imagen que incumpla las normas, corres el riesgo de perder tu cuenta.
-                </p>
-            </div>
-
+            
         </div>
     </main>
 
@@ -123,52 +131,15 @@ include 'conexion.php'; // Archivo para conectar a la base de datos
         <p>Coffee-P &copy; Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        // Script para agregar y eliminar ingredientes dinámicamente
-        document.getElementById('add-ingrediente').addEventListener('click', function() {
-            var container = document.getElementById('ingredientes-container');
-            var newIngrediente = document.createElement('div');
-            newIngrediente.classList.add('ingrediente');
-            newIngrediente.innerHTML = `
-                <select name="ingredientes[]" required>
-                    <option value="">-- Selecciona un ingrediente --</option>
-                    <?php include 'obtener_ingredientes.php'; ?>
-                </select>
-                <input type="text" name="cantidades[]" placeholder="Cantidad (ej. 200g)" required>
-                <button type="button" class="remove-ingrediente">Eliminar</button>
-            `;
-            container.appendChild(newIngrediente);
-        });
-
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('remove-ingrediente')) {
-                e.target.parentElement.remove();
-            }
-        });
-
-        // Mostrar vista previa de la imagen
         document.getElementById('rec_foto').addEventListener('change', function(event) {
-            const file = event.target.files[0]; // Obtén el archivo seleccionado
-            const previewImage = document.getElementById('foto-preview'); // Selecciona el elemento de la imagen
-            const previewText = document.getElementById('foto-texto'); // Selecciona el texto
-
+            const [file] = event.target.files;
             if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result; // Asigna la imagen cargada
-                    previewImage.style.display = "block"; // Muestra la imagen
-                    previewText.style.display = "none"; // Oculta el texto
-                };
-
-                reader.readAsDataURL(file); // Lee el archivo como DataURL
-            } else {
-                previewImage.style.display = "none"; // Oculta la imagen si no hay archivo
-                previewText.style.display = "block"; // Vuelve a mostrar el texto
+                const preview = document.getElementById('foto-preview');
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
             }
         });
-
     </script>
 </body>
 </html>
