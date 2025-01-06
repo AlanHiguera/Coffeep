@@ -108,7 +108,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         die("Error en la consulta: " . $stmt->error);
     }
-
+    session_start();
+    $_SESSION['mensaje'] = "¡Tu receta ha sido creada! ☕✨";
+    header("Location: crear_receta.php");
+    exit();
     $stmt->close();
     $conn->close();
 }
