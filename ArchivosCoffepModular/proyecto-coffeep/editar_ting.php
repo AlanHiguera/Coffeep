@@ -21,22 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Consulta preparada para actualizar el nombre
-    $sql_update = "UPDATE tipo_ingrediente SET Tip_nombre = ? WHERE Tip_idtipo = ?";
-    $stmt = $conn->prepare($sql_update);
+    // Consulta clásica para actualizar el nombre
+    $sql_update = "UPDATE tipo_ingrediente SET Tip_nombre = '$nombre' WHERE Tip_idtipo = $id";
 
-    if ($stmt) {
-        $stmt->bind_param("si", $nombre, $id);
-
-        if ($stmt->execute()) {
-            echo "Exitoso: El nombre ha sido actualizado.";
-        } else {
-            echo "Error al actualizar: " . $stmt->error;
-        }
-
-        $stmt->close();
+    if (mysqli_query($conn, $sql_update)) {
+        echo "Exitoso: El nombre ha sido actualizado.";
     } else {
-        echo "Error en la preparación de la consulta.";
+        echo "Error al actualizar: " . mysqli_error($conn);
     }
 
     $conn->close();
