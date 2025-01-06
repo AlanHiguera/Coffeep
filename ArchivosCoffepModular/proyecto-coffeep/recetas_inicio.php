@@ -16,7 +16,9 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Construir la consulta principal
 $sql = "SELECT Rec_idrec, Rec_nombre, Rec_foto, Rec_calificacion, Rec_clasificacion, Rec_nickname 
-        FROM receta";
+        FROM receta R, usuario U 
+        WHERE R.Rec_nickname = U.Usu_nickname AND U.Usu_estado = 'activo'
+        ";
 
 // Añadir joins para ingredientes y tipos de grano si se seleccionan filtros
 $joins = [];
