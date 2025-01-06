@@ -75,7 +75,7 @@ if (isset($_GET['id'])) {
     }
 
     // Obtener los comentarios principales (sin respuesta a otro comentario)
-    $sqlComentarios = "SELECT * FROM comentario WHERE Com_idrec = $id AND Com_idresp IS NULL ORDER BY Com_fecha DESC";
+    $sqlComentarios = "SELECT * FROM comentario, usuario, receta WHERE Com_idrec = $id AND Rec_nickname = Com_nickname AND Rec_nickname = Usu_nickname AND Usu_estado = 'activo' AND Com_idresp IS NULL ORDER BY Com_fecha DESC";
     $resultComentarios = $conn->query($sqlComentarios);
 
     $comentarios = [];
